@@ -1,6 +1,6 @@
 # Compiler and flags
 CC = gcc
-CFLAGS = -Wall -Iinclude
+CFLAGS = -Wall -Iinclude -fPIC
 LDFLAGS =
 
 # Directories
@@ -8,6 +8,10 @@ SRC_DIR = src
 INCLUDE_DIR = include
 BUILD_DIR = build
 DIST_DIR = dist
+
+LIBRARY_NAME = lib
+SO_NAME = lib$(LIBRARY_NAME).so
+A_NAME = lib$(LIBRARY_NAME).a
 
 # Target and version info
 TARGET = project
@@ -40,7 +44,7 @@ counter = 0
 # Targets
 
 .PHONY: all
-all: check_tools $(BUILD_DIR) $(TARGET) ## Build the project
+all: check_tools $(BUILD_DIR) static shared, $(TARGET)## Build the project
 	@echo "Build complete."
 
 .PHONY: check_tools
@@ -52,30 +56,29 @@ $(BUILD_DIR): ## Create the build directory if it doesn't exist
 	@echo "[INFO] Creating build directory"
 	mkdir -p $(BUILD_DIR)
 
-$(TARGET): $(OBJ_FILES) ## Build the shell executable
-	@echo "[INFO] Building the project"
-	@$(CC) -o $@ $^ $(LDFLAGS)
-	@echo "[INFO] Executable created: $(TARGET)"
-
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c ## Compile source files with progress
 	$(eval counter=$(shell echo $$(($(counter)+1))))
 	@echo "[$(counter)/$(TOTAL_FILES)] Compiling $< -> $@"
 	@$(CC) $(CFLAGS) -c -o $@ $<
 
-.PHONY: install
-install: all ## Install the executable to /usr/bin/
-	@echo "[INFO] Installing $(TARGET) to /usr/bin/"
-	cp $(TARGET) /usr/bin/$(TARGET)
+$(TARGET): $(BUILD_DIR) static ## Build executable using static library
+	@echo "[INFO] Building executable: $(TARGET)"
+	@$(CC) src/main.c -o $(TARGET) -L. -l:$(A_NAME) $(LDFLAGS) $(INCLUDE)
 
-.PHONY: uninstall
-uninstall: ## Remove the executable from /usr/bin/
-	@echo "[INFO] Uninstalling $(TARGET)"
-	rm -f /usr/bin/$(TARGET)
+.PHONY: shared
+shared: $(BUILD_DIR) $(OBJ_FILES) ## Build shared library
+	@echo "[INFO] Building shared library: $(SO_NAME)"
+	@$(CC) -shared $(CFLAGS) -o $(SO_NAME) $(OBJ_FILES)
+
+.PHONY: static
+static: $(BUILD_DIR) $(OBJ_FILES) ## Build static library
+	@echo "[INFO] Building static library: $(A_NAME)"
+	@$(AR) rcs $(A_NAME) $(OBJ_FILES)
 
 .PHONY: clean
 clean: ## Remove all build files and the executable
 	@echo "[INFO] Cleaning up build directory and executable."
-	rm -rf $(BUILD_DIR) $(TARGET)
+	rm -rf $(BUILD_DIR) $(TARGET) $(SO_NAME) $(A_NAME)
 
 .PHONY: distclean
 distclean: clean ## Perform a full clean, including backup and temporary files
