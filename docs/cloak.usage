@@ -1,0 +1,9 @@
+cloak <COMMANDS> | [<OPTIONS>];
+
+<COMMANDS> ::= (encode <PATH>) "Encode a file"
+			 | (decode <PATH>) "Decode a file" 
+			 ;
+
+<OPTIONS> ::= (-h || --help) "Prints the help message"
+			| (-v || --version) "Prints the project version"
+			;

@@ -66,7 +66,7 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c ## Compile source files with progress
 
 $(TARGET): $(BUILD_DIR) static ## Build executable using static library
 	@echo "[INFO] Building executable: $(TARGET)"
-	@$(CC) src/main.c -o $(TARGET) -L. -l:$(A_NAME) $(LDFLAGS) $(INCLUDE)
+	@$(CC) src/main.c -o $(TARGET) -L. -l:$(A_NAME) $(LDFLAGS) -I$(INCLUDE_DIR)
 
 .PHONY: shared
 shared: $(BUILD_DIR) $(OBJ_FILES) ## Build shared library
@@ -99,6 +99,12 @@ dist: $(SRC_FILES) ## Create a tarball of the project
 compile_commands.json: $(SRC_FILES) ## Generate compile_commands.json
 	@echo "[INFO] Generating compile_commands.json"
 	bear -- make all
+
+.PHONY: autocomplete
+autocomplete: ## Generate autocomplete scripts
+	complgen aot ./docs/cloak.usage --zsh-script ./docs/_cloak.zsh
+	complgen aot ./docs/cloak.usage --bash-script ./docs/_cloak.bash
+	complgen aot ./docs/cloak.usage --fish-script ./docs/_cloak.fish
 
 ## Show this help message
 .PHONY: help
