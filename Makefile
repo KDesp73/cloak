@@ -1,6 +1,6 @@
 # Compiler and flags
 CC = gcc
-CFLAGS = -Wall -Iinclude -fPIC
+CFLAGS = -Wall -Werror -Iinclude -fPIC
 LDFLAGS =
 
 # Directories
@@ -9,12 +9,12 @@ INCLUDE_DIR = include
 BUILD_DIR = build
 DIST_DIR = dist
 
-LIBRARY_NAME = lib
+LIBRARY_NAME = cloak
 SO_NAME = lib$(LIBRARY_NAME).so
 A_NAME = lib$(LIBRARY_NAME).a
 
 # Target and version info
-TARGET = project
+TARGET = cloak
 version_file = include/version.h
 VERSION_MAJOR = $(shell sed -n -e 's/\#define VERSION_MAJOR \([0-9]*\)/\1/p' $(version_file))
 VERSION_MINOR = $(shell sed -n -e 's/\#define VERSION_MINOR \([0-9]*\)/\1/p' $(version_file))
@@ -22,10 +22,13 @@ VERSION_PATCH = $(shell sed -n -e 's/\#define VERSION_PATCH \([0-9]*\)/\1/p' $(v
 VERSION = $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)
 
 # Determine the build type
-ifneq ($(type), RELEASE)
-	CFLAGS += -DDEBUG -ggdb
-else
+ifeq ($(type), RELEASE)
 	CFLAGS += -O3
+else
+	SANITIZERS = -fsanitize=address,undefined
+	CFLAGS  += -DDEBUG -ggdb
+	CFLAGS  += $(SANITIZERS)
+	LDFLAGS += $(SANITIZERS)
 endif
 
 # Source and object files
@@ -44,7 +47,7 @@ counter = 0
 # Targets
 
 .PHONY: all
-all: check_tools $(BUILD_DIR) static shared, $(TARGET)## Build the project
+all: check_tools $(BUILD_DIR) static shared $(TARGET) ## Build the project
 	@echo "Build complete."
 
 .PHONY: check_tools
