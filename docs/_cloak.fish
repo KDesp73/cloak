@@ -14,16 +14,19 @@ function _cloak
         set COMP_CWORD (count $COMP_WORDS)
     end
 
-    set literals "--help" "encode" "-v" "-h" "--version" "decode"
+    set literals "--help" "--key" "-v" "-k" "-h" "-i" "encrypt" "decrypt" "--input" "-o" "--output" "--version"
 
     set descriptions
-    set descriptions[2] "Encode a file"
     set descriptions[3] "Prints the project version"
-    set descriptions[4] "Prints the help message"
-    set descriptions[6] "Decode a file"
+    set descriptions[4] "Specify the encryption key"
+    set descriptions[5] "Prints the help message"
+    set descriptions[6] "Specify the input path"
+    set descriptions[7] "Encrypt a file"
+    set descriptions[8] "Decrypt a file"
+    set descriptions[10] "Specify the output path"
 
     set literal_transitions
-    set literal_transitions[1] "set inputs 1 2 3 5 4 6; set tos 2 3 2 2 2 3"
+    set literal_transitions[1] "set inputs 1 2 3 4 5 6 7 8 11 12 9 10; set tos 2 2 2 2 2 3 2 2 3 2 3 3"
 
     set match_anything_transitions_from 3
     set match_anything_transitions_to 2

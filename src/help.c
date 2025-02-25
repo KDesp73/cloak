@@ -6,8 +6,8 @@ static void help();
 void Help(Command command)
 {
     switch (command) {
-        case COMMAND_ENCODE:
-        case COMMAND_DECODE:
+        case COMMAND_ENCRYPT:
+        case COMMAND_DECRYPT:
 
         case COMMAND_NONE:
         default:
@@ -37,8 +37,11 @@ static void help()
     printf("\n");
 
     PB("OPTIONS");
-    PI("-h --help       Prints this message");
-    PI("-v --version    Prints the current version");
+    PI("-h --help            Prints this message");
+    PI("-v --version         Prints the current version");
+    PI("-k --key <KEY>       Specify the encryption key");
+    PI("-i --input <PATH>   Specify the input path");
+    PI("-o --output <PATH>   Specify the output path");
 
     footer();
 }

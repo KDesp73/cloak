@@ -1,9 +1,12 @@
 cloak <COMMANDS> | [<OPTIONS>];
 
-<COMMANDS> ::= (encode <PATH>) "Encode a file"
-			 | (decode <PATH>) "Decode a file" 
+<COMMANDS> ::= (encrypt) "Encrypt a file"
+			 | (decrypt) "Decrypt a file" 
 			 ;
 
 <OPTIONS> ::= (-h || --help) "Prints the help message"
 			| (-v || --version) "Prints the project version"
+            | (-k || --key) "Specify the encryption key"
+            | (-i <PATH> || --input <PATH>) "Specify the input path"
+            | (-o <PATH> || --output <PATH>) "Specify the output path"
 			;

@@ -3,6 +3,8 @@ compile_commands.json
 .cache
 .changelog
 
+*.cloak
 cloak
 libcloak.*
 *.o
+*.txt

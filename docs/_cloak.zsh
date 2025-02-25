@@ -5,16 +5,19 @@ _cloak_cmd_0 () {
 }
 
 _cloak () {
-    local -a literals=("--help" "encode" "-v" "-h" "--version" "decode")
+    local -a literals=("--help" "--key" "-v" "-k" "-h" "-i" "encrypt" "decrypt" "--input" "-o" "--output" "--version")
 
     local -A descriptions
-    descriptions[2]="Encode a file"
     descriptions[3]="Prints the project version"
-    descriptions[4]="Prints the help message"
-    descriptions[6]="Decode a file"
+    descriptions[4]="Specify the encryption key"
+    descriptions[5]="Prints the help message"
+    descriptions[6]="Specify the input path"
+    descriptions[7]="Encrypt a file"
+    descriptions[8]="Decrypt a file"
+    descriptions[10]="Specify the output path"
 
     local -A literal_transitions
-    literal_transitions[1]="([1]=2 [2]=3 [3]=2 [5]=2 [4]=2 [6]=3)"
+    literal_transitions[1]="([1]=2 [2]=2 [3]=2 [4]=2 [5]=2 [6]=3 [7]=2 [8]=2 [11]=3 [12]=2 [9]=3 [10]=3)"
 
     local -A match_anything_transitions
     match_anything_transitions=([3]=2)
@@ -53,8 +56,8 @@ _cloak () {
 
         return 1
     done
-    declare -A literal_transitions_level_0=([1]="2 3 4 6")
-    declare -A literal_transitions_level_1=([1]="1 5")
+    declare -A literal_transitions_level_0=([1]="3 4 5 6 7 8 10")
+    declare -A literal_transitions_level_1=([1]="1 2 11 12 9")
     declare -A subword_transitions_level_0=()
     declare -A subword_transitions_level_1=()
     declare -A commands_level_0=()

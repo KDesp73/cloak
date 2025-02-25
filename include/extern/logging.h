@@ -76,6 +76,12 @@ LOGAPI void logging_log(log_level_t log_level, char* format, ...);
         } \
     } while (0)
 
+#define TODO(fmt, ...) \
+    do { \
+        fprintf(stderr, "TODO: " fmt "\n", ##__VA_ARGS__); \
+        exit(1); \
+    } while(0)
+
 #ifdef LOGGING_IMPLEMENTATION
 
 LOGAPI void logging_log(log_level_t log_level, char* format, ...)
