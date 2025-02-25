@@ -3,7 +3,7 @@
 #include "extern/logging.h"
 #include "hashing.h"
 
-static int encryptFile(const char* in, const char* out, unsigned char key[KEY_SIZE])
+static int encryptFile(const char* in, const char* out, unsigned char key[CLOAK_KEY_SIZE])
 {
     char* output = NULL;
     if (out) {
@@ -19,7 +19,7 @@ static int encryptFile(const char* in, const char* out, unsigned char key[KEY_SI
         }
     }
 
-    if (AESEncryptFile(in, output, key) != 0) {
+    if (CLOAK_AESEncryptFile(in, output, key) != 0) {
         ERRO("Encryption of file %s failed.", in);
         free(output);
         return false;
@@ -28,10 +28,10 @@ static int encryptFile(const char* in, const char* out, unsigned char key[KEY_SI
     return true;
 }
 
-int CommandEncrypt(Context* ctx)
+int CLOAK_CommandEncrypt(CLOAK_Context* ctx)
 {
-    unsigned char key[KEY_SIZE];
-    AESGenerateKey(key);
+    unsigned char key[CLOAK_KEY_SIZE];
+    CLOAK_AESGenerateKey(key);
 
     // TODO: backup file or directory
 
@@ -44,28 +44,28 @@ int CommandEncrypt(Context* ctx)
 
     
     // TODO: Sign key using RSA
-    FILE* key_file = fopen(KEY_FILE, "wb");
+    FILE* key_file = fopen(CLOAK_KEY_FILE, "wb");
     if (!key_file) {
         ERRO("Failed to open key file for writing.");
         return false;
     }
 
-    fwrite(key, 1, KEY_SIZE, key_file);
+    fwrite(key, 1, CLOAK_KEY_SIZE, key_file);
     fclose(key_file);
 
     return true;
 }
 
-int CommandDecrypt(Context* ctx)
+int CLOAK_CommandDecrypt(CLOAK_Context* ctx)
 {
-    unsigned char key[KEY_SIZE];
-    FILE* key_file = fopen(KEY_FILE, "rb");
+    unsigned char key[CLOAK_KEY_SIZE];
+    FILE* key_file = fopen(CLOAK_KEY_FILE, "rb");
     if (!key_file) {
         ERRO("Failed to open key file for reading.");
         return false;
     }
 
-    if (fread(key, 1, KEY_SIZE, key_file) != KEY_SIZE) {
+    if (fread(key, 1, CLOAK_KEY_SIZE, key_file) != CLOAK_KEY_SIZE) {
         ERRO("Failed to read the complete key from file.");
         fclose(key_file);
         return false;
@@ -75,7 +75,7 @@ int CommandDecrypt(Context* ctx)
     if (ctx->is_dir) {
         TODO("Handle directory decryption");
     } else {
-        if (AESDecryptFile(ctx->input, ctx->output, key) != 0) {
+        if (CLOAK_AESDecryptFile(ctx->input, ctx->output, key) != 0) {
             ERRO("Decryption of file %s failed.", ctx->input);
             return false;
         }
@@ -85,11 +85,11 @@ int CommandDecrypt(Context* ctx)
     return true;
 }
 
-int CommandHash(Context* ctx)
+int CLOAK_CommandHash(CLOAK_Context* ctx)
 {
-    unsigned char hash[HASH_SIZE];
-    HashFile(ctx->input, hash);
-    HashPrint(hash);
+    unsigned char hash[CLOAK_HASH_SIZE];
+    CLOAK_HashFile(ctx->input, hash);
+    CLOAK_HashPrint(hash);
 
     return true;
 }

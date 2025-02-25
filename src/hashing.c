@@ -2,7 +2,7 @@
 #include <sodium/crypto_hash_sha256.h>
 #include <stdio.h>
 
-int HashFile(const char* path, unsigned char output_hash[HASH_SIZE])
+int CLOAK_HashFile(const char* path, unsigned char output_hash[CLOAK_HASH_SIZE])
 {
     FILE* file = fopen(path, "rb");
     if (!file) {
@@ -24,9 +24,9 @@ int HashFile(const char* path, unsigned char output_hash[HASH_SIZE])
     return 0;
 }
 
-void HashPrint(unsigned char hash[HASH_SIZE])
+void CLOAK_HashPrint(unsigned char hash[CLOAK_HASH_SIZE])
 {
-    for (int i = 0; i < HASH_SIZE; i++)
+    for (int i = 0; i < CLOAK_HASH_SIZE; i++)
         printf("%02x", hash[i]);
     printf("\n");
 }

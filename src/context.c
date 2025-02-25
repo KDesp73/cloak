@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-void ContextInit(Context* ctx, int argc, char** argv)
+void CLOAK_ContextInit(CLOAK_Context* ctx, int argc, char** argv)
 {
     ctx->input = NULL;
     ctx->output = NULL;
@@ -15,14 +15,14 @@ void ContextInit(Context* ctx, int argc, char** argv)
     ctx->argv = argv;
 }
 
-void ContextFree(Context* ctx)
+void CLOAK_ContextFree(CLOAK_Context* ctx)
 {
     free(ctx->input);
     free(ctx->output);
     free(ctx->key);
 }
 
-static bool validateCommandEncrypt(Context* ctx)
+static bool validateCommandEncrypt(CLOAK_Context* ctx)
 {
     if (ctx->output && strcmp(file_extension(ctx->output), "cloak") != 0) {
         ERRO("Output file must use `.cloak` as the extension");
@@ -32,7 +32,7 @@ static bool validateCommandEncrypt(Context* ctx)
     return true;
 }
 
-static bool validateCommandDecrypt(Context* ctx)
+static bool validateCommandDecrypt(CLOAK_Context* ctx)
 {
     if (!ctx->output) {
         ERRO("Output path is not specified");
@@ -58,7 +58,7 @@ static bool validateCommandDecrypt(Context* ctx)
     return true;
 }
 
-static bool validateCommandHash(Context* ctx)
+static bool validateCommandHash(CLOAK_Context* ctx)
 {
     if (!is_file(ctx->input)) {
         ERRO("Input is not a file");
@@ -67,7 +67,7 @@ static bool validateCommandHash(Context* ctx)
     return true;
 }
 
-static bool validateInput(Context* ctx)
+static bool validateInput(CLOAK_Context* ctx)
 {
     if (!ctx->input) {
         ERRO("Input path is not specified");
@@ -82,9 +82,9 @@ static bool validateInput(Context* ctx)
     return true;
 }
 
-bool ContextValidate(Context* ctx) 
+bool CLOAK_ContextValidate(CLOAK_Context* ctx) 
 {
-    if (ctx->command == COMMAND_NONE) {
+    if (ctx->command == CLOAK_COMMAND_NONE) {
         ERRO("Command is not specified");
         return false;
     }
@@ -93,19 +93,19 @@ bool ContextValidate(Context* ctx)
         return false;
     }
 
-    if (ctx->command == COMMAND_ENCRYPT) {
+    if (ctx->command == CLOAK_COMMAND_ENCRYPT) {
         if (!validateCommandEncrypt(ctx)) {
             return false;
         }
     }
 
-    if (ctx->command == COMMAND_DECRYPT) {
+    if (ctx->command == CLOAK_COMMAND_DECRYPT) {
         if (!validateCommandDecrypt(ctx)) {
             return false;
         }
     }
 
-    if(ctx->command == COMMAND_HASH) {
+    if(ctx->command == CLOAK_COMMAND_HASH) {
         if(!validateCommandHash(ctx)) {
             return false;
         }

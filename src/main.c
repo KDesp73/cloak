@@ -1,3 +1,5 @@
+#define CLOAK_REMOVE_PREFIXES
+
 #include "aes.h"
 #include "cli.h"
 #include "commands.h"
@@ -33,9 +35,9 @@ int main(int argc, char** argv){
         NULL
     );
 
-    Command command = GetCommand(argv[1]);
+    CLOAK_Command command = CLOAK_GetCommand(argv[1]);
     Context ctx = {.command = command};
-    ContextInit(&ctx, argc, argv);
+    CLOAK_ContextInit(&ctx, argc, argv);
 
     int opt;
     LOOP_ARGS(opt, args){
@@ -44,7 +46,7 @@ int main(int argc, char** argv){
                 Help(command);
                 CLEANUP(0);
             case FLAG_VERSION:
-                printf("cloak v%s\n", VERSION);
+                printf("cloak v%s\n", CLOAK_VERSION);
                 CLEANUP(0);
             case FLAG_KEY:
                 ctx.key = strdup(optarg);

@@ -1,35 +1,35 @@
 #include "cli.h"
 #include <string.h>
 
-char* CommandToString(Command c)
+char* CLOAK_CommandToString(CLOAK_Command c)
 {
     switch (c) {
-    case COMMAND_ENCRYPT:
+    case CLOAK_COMMAND_ENCRYPT:
         return "encrypt";
-    case COMMAND_DECRYPT:
+    case CLOAK_COMMAND_DECRYPT:
         return "decrypt";
-    case COMMAND_HASH:
+    case CLOAK_COMMAND_HASH:
         return "hash";
 
-    case COMMAND_NONE:
+    case CLOAK_COMMAND_NONE:
     default:
         return NULL;
     }
 }
 
-Command GetCommand(const char* command)
+CLOAK_Command CLOAK_GetCommand(const char* command)
 {
-    if(command == NULL) return COMMAND_NONE;
+    if(command == NULL) return CLOAK_COMMAND_NONE;
 
 #define COMPARE_AND_RETURN_COMMAND(c) \
-    if(!strcmp(command, CommandToString(c))) return c
+    if(!strcmp(command, CLOAK_CommandToString(c))) return c
     
-    COMPARE_AND_RETURN_COMMAND(COMMAND_ENCRYPT);
-    else COMPARE_AND_RETURN_COMMAND(COMMAND_DECRYPT);
-    else COMPARE_AND_RETURN_COMMAND(COMMAND_HASH);
+    COMPARE_AND_RETURN_COMMAND(CLOAK_COMMAND_ENCRYPT);
+    else COMPARE_AND_RETURN_COMMAND(CLOAK_COMMAND_DECRYPT);
+    else COMPARE_AND_RETURN_COMMAND(CLOAK_COMMAND_HASH);
     
 #undef COMPARE_AND_RETURN_COMMAND
 
-    return COMMAND_NONE;
+    return CLOAK_COMMAND_NONE;
 }
 

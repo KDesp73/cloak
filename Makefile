@@ -16,9 +16,9 @@ A_NAME = lib$(LIBRARY_NAME).a
 # Target and version info
 TARGET = cloak
 version_file = include/version.h
-VERSION_MAJOR = $(shell sed -n -e 's/\#define VERSION_MAJOR \([0-9]*\)/\1/p' $(version_file))
-VERSION_MINOR = $(shell sed -n -e 's/\#define VERSION_MINOR \([0-9]*\)/\1/p' $(version_file))
-VERSION_PATCH = $(shell sed -n -e 's/\#define VERSION_PATCH \([0-9]*\)/\1/p' $(version_file))
+VERSION_MAJOR = $(shell sed -n -e 's/\#define CLOAK_VERSION_MAJOR \([0-9]*\)/\1/p' $(version_file))
+VERSION_MINOR = $(shell sed -n -e 's/\#define CLOAK_VERSION_MINOR \([0-9]*\)/\1/p' $(version_file))
+VERSION_PATCH = $(shell sed -n -e 's/\#define CLOAK_VERSION_PATCH \([0-9]*\)/\1/p' $(version_file))
 VERSION = $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)
 
 # Determine the build type

@@ -8,20 +8,20 @@ static void decryptHelp();
 static void hashHelp();
 static void footer();
 
-void Help(Command command)
+void CLOAK_Help(CLOAK_Command command)
 {
     switch (command) {
-        case COMMAND_ENCRYPT:
+        case CLOAK_COMMAND_ENCRYPT:
             encryptHelp();
             break;
-        case COMMAND_DECRYPT:
+        case CLOAK_COMMAND_DECRYPT:
             decryptHelp();
             break;
-        case COMMAND_HASH:
+        case CLOAK_COMMAND_HASH:
             hashHelp();
             break;
 
-        case COMMAND_NONE:
+        case CLOAK_COMMAND_NONE:
         default:
             help();
     }

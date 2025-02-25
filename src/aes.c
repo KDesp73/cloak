@@ -6,12 +6,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-void AESGenerateKey(unsigned char key[KEY_SIZE])
+void CLOAK_AESGenerateKey(unsigned char key[CLOAK_KEY_SIZE])
 {
-    randombytes_buf(key, KEY_SIZE);
+    randombytes_buf(key, CLOAK_KEY_SIZE);
 }
 
-int AESEncryptFile(const char *input_file, const char *output_file, unsigned char key[KEY_SIZE])
+int CLOAK_AESEncryptFile(const char *input_file, const char *output_file, unsigned char key[CLOAK_KEY_SIZE])
 {
     FILE *fin = fopen(input_file, "rb");
     FILE *fout = fopen(output_file, "wb");
@@ -21,8 +21,8 @@ int AESEncryptFile(const char *input_file, const char *output_file, unsigned cha
     }
 
     // Compute the hash of the original file
-    unsigned char file_hash[HASH_SIZE];
-    if (HashFile(input_file, file_hash) != 0) {
+    unsigned char file_hash[CLOAK_HASH_SIZE];
+    if (CLOAK_HashFile(input_file, file_hash) != 0) {
         ERRO("Failed to compute file hash\n");
         fclose(fin);
         fclose(fout);
@@ -30,12 +30,12 @@ int AESEncryptFile(const char *input_file, const char *output_file, unsigned cha
     }
 
     // Generate and write nonce
-    unsigned char nonce[NONCE_SIZE];
-    randombytes_buf(nonce, NONCE_SIZE);
-    fwrite(nonce, 1, NONCE_SIZE, fout);
+    unsigned char nonce[CLOAK_NONCE_SIZE];
+    randombytes_buf(nonce, CLOAK_NONCE_SIZE);
+    fwrite(nonce, 1, CLOAK_NONCE_SIZE, fout);
 
     unsigned char buffer[4096];
-    unsigned char encrypted[4096 + MAC_SIZE];
+    unsigned char encrypted[4096 + CLOAK_MAC_SIZE];
     size_t bytes_read;
 
     while ((bytes_read = fread(buffer, 1, sizeof(buffer), fin)) > 0) {
@@ -45,18 +45,18 @@ int AESEncryptFile(const char *input_file, const char *output_file, unsigned cha
             fclose(fout);
             return -1;
         }
-        fwrite(encrypted, 1, bytes_read + MAC_SIZE, fout);
+        fwrite(encrypted, 1, bytes_read + CLOAK_MAC_SIZE, fout);
     }
 
     // Append the hash at the end of the encrypted file
-    fwrite(file_hash, 1, HASH_SIZE, fout);
+    fwrite(file_hash, 1, CLOAK_HASH_SIZE, fout);
 
     fclose(fin);
     fclose(fout);
     return 0;
 }
 
-int AESDecryptFile(const char *input_file, const char *output_file, unsigned char key[KEY_SIZE])
+int CLOAK_AESDecryptFile(const char *input_file, const char *output_file, unsigned char key[CLOAK_KEY_SIZE])
 {
     FILE *fin = fopen(input_file, "rb");
     if (!fin) {
@@ -66,15 +66,15 @@ int AESDecryptFile(const char *input_file, const char *output_file, unsigned cha
 
     fseek(fin, 0, SEEK_END);
     long file_size = ftell(fin);
-    if (file_size < NONCE_SIZE + HASH_SIZE) {
+    if (file_size < CLOAK_NONCE_SIZE + CLOAK_HASH_SIZE) {
         ERRO("File is too small to be valid.\n");
         fclose(fin);
         return -1;
     }
 
-    unsigned char stored_hash[HASH_SIZE];
-    fseek(fin, file_size - HASH_SIZE, SEEK_SET); // Seek to the hash position
-    if (fread(stored_hash, 1, HASH_SIZE, fin) != HASH_SIZE) {
+    unsigned char stored_hash[CLOAK_HASH_SIZE];
+    fseek(fin, file_size - CLOAK_HASH_SIZE, SEEK_SET); // Seek to the hash position
+    if (fread(stored_hash, 1, CLOAK_HASH_SIZE, fin) != CLOAK_HASH_SIZE) {
         ERRO("Failed to read hash from encrypted file.\n");
         fclose(fin);
         return -1;
@@ -82,8 +82,8 @@ int AESDecryptFile(const char *input_file, const char *output_file, unsigned cha
 
     // Rewind to the start and read nonce
     rewind(fin);
-    unsigned char nonce[NONCE_SIZE];
-    if (fread(nonce, 1, NONCE_SIZE, fin) != NONCE_SIZE) {
+    unsigned char nonce[CLOAK_NONCE_SIZE];
+    if (fread(nonce, 1, CLOAK_NONCE_SIZE, fin) != CLOAK_NONCE_SIZE) {
         ERRO("Failed to read nonce.\n");
         fclose(fin);
         return -1;
@@ -96,10 +96,10 @@ int AESDecryptFile(const char *input_file, const char *output_file, unsigned cha
         return -1;
     }
 
-    unsigned char buffer[4096 + MAC_SIZE];
+    unsigned char buffer[4096 + CLOAK_MAC_SIZE];
     unsigned char decrypted[4096];
     size_t bytes_read;
-    long remaining = file_size - NONCE_SIZE - HASH_SIZE; // Ignore the last HASH_SIZE bytes
+    long remaining = file_size - CLOAK_NONCE_SIZE - CLOAK_HASH_SIZE; // Ignore the last HASH_SIZE bytes
 
     while (remaining > 0) {
         size_t chunk_size = (remaining < sizeof(buffer)) ? remaining : sizeof(buffer);
@@ -115,7 +115,7 @@ int AESDecryptFile(const char *input_file, const char *output_file, unsigned cha
             return -1;
         }
         
-        size_t decrypted_size = bytes_read - MAC_SIZE;
+        size_t decrypted_size = bytes_read - CLOAK_MAC_SIZE;
         fwrite(decrypted, 1, decrypted_size, fout);
     }
 
@@ -123,14 +123,14 @@ int AESDecryptFile(const char *input_file, const char *output_file, unsigned cha
     fclose(fout);
 
     // Compute the hash of the decrypted file
-    unsigned char computed_hash[HASH_SIZE];
-    if (HashFile(output_file, computed_hash) != 0) {
+    unsigned char computed_hash[CLOAK_HASH_SIZE];
+    if (CLOAK_HashFile(output_file, computed_hash) != 0) {
         ERRO("Failed to compute hash for validation");
         return -1;
     }
 
     // Compare hashes
-    if (sodium_memcmp(stored_hash, computed_hash, HASH_SIZE) != 0) {
+    if (sodium_memcmp(stored_hash, computed_hash, CLOAK_HASH_SIZE) != 0) {
         ERRO("Decryption successful, but hash verification failed!");
         return -1;
     }

@@ -8,15 +8,23 @@
 typedef struct {
     int argc;
     char** argv;
-    Command command;
+    CLOAK_Command command;
     char* input;
     char* output;
     bool is_dir;
     char* key;
-} Context;
+} CLOAK_Context;
 
-void ContextInit(Context* ctx, int argc, char** argv);
-void ContextFree(Context* ctx);
-bool ContextValidate(Context* ctx);
+void CLOAK_ContextInit(CLOAK_Context* ctx, int argc, char** argv);
+void CLOAK_ContextFree(CLOAK_Context* ctx);
+bool CLOAK_ContextValidate(CLOAK_Context* ctx);
+
+#ifdef CLOAK_REMOVE_PREFIXES
+#define Context CLOAK_Context
+
+#define ContextInit CLOAK_ContextInit
+#define ContextFree CLOAK_ContextFree
+#define ContextValidate CLOAK_ContextValidate
+#endif // CLOAK_REMOVE_PREFIXES
 
 #endif // CONTEXT_H

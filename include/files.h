@@ -45,4 +45,8 @@ static inline char* file_extension(const char* path)
     return (dot && dot != path) ? dot + 1 : "";
 }
 
+
+#ifdef CLOAK_REMOVE_PREFIXES
+#endif // CLOAK_REMOVE_PREFIXES
+
 #endif // FILES_H
