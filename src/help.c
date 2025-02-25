@@ -34,6 +34,7 @@ static void help()
     PB("COMMANDS");
     PI("encode               Encode a file");
     PI("decode               Decode a file");
+    PI("hash                 Prints the hash of a file");
     printf("\n");
 
     PB("OPTIONS");

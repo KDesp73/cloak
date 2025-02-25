@@ -1,6 +1,7 @@
 #include "commands.h"
 #include "aes.h"
 #include "extern/logging.h"
+#include "hashing.h"
 
 static int encryptFile(const char* in, const char* out, unsigned char key[KEY_SIZE])
 {
@@ -84,4 +85,12 @@ int CommandDecrypt(Context* ctx)
     return true;
 }
 
+int CommandHash(Context* ctx)
+{
+    unsigned char hash[HASH_SIZE];
+    HashFile(ctx->input, hash);
+    HashPrint(hash);
+
+    return true;
+}
 

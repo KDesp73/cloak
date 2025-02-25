@@ -11,10 +11,10 @@ _cloak () {
     local words cword
     _get_comp_words_by_ref -n "$COMP_WORDBREAKS" words cword
 
-    declare -a literals=(--help --key -v -i -h -k encrypt decrypt --input -o --output --version)
+    declare -a literals=(--help --key -v -i -h -k encrypt decrypt --input -o --output hash --version)
     declare -A literal_transitions=()
-    literal_transitions[0]="([6]=1 [7]=1)"
-    literal_transitions[1]="([0]=2 [1]=3 [2]=2 [3]=3 [4]=2 [5]=3 [10]=3 [11]=2 [8]=3 [9]=3)"
+    literal_transitions[0]="([11]=1 [6]=1 [7]=1)"
+    literal_transitions[1]="([0]=2 [1]=3 [2]=2 [3]=3 [4]=2 [5]=3 [10]=3 [12]=2 [8]=3 [9]=3)"
     declare -A match_anything_transitions=([3]=2)
     declare -A subword_transitions
 
@@ -52,8 +52,8 @@ _cloak () {
         return 1
     done
 
-    declare -A literal_transitions_level_0=([1]="2 3 4 5 9" [0]="6 7")
-    declare -A literal_transitions_level_1=([1]="0 1 10 11 8")
+    declare -A literal_transitions_level_0=([1]="2 3 4 5 9" [0]="11 6 7")
+    declare -A literal_transitions_level_1=([1]="0 1 10 12 8")
     declare -A subword_transitions_level_0=()
     declare -A subword_transitions_level_1=()
     declare -A commands_level_0=()

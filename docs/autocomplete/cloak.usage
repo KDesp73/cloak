@@ -2,6 +2,7 @@ cloak <COMMANDS> <OPTIONS>;
 
 <COMMANDS> ::= (encrypt) "Encrypt a file"
 			 | (decrypt) "Decrypt a file" 
+			 | (hash) "Prints the hash of a file" 
 			 ;
 
 <OPTIONS> ::= (-h || --help) "Prints the help message"

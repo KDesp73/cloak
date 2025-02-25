@@ -4,7 +4,8 @@
 typedef enum {
     COMMAND_NONE,
     COMMAND_ENCRYPT,
-    COMMAND_DECRYPT
+    COMMAND_DECRYPT,
+    COMMAND_HASH
 } Command;
 
 typedef enum {

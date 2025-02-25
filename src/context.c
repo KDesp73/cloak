@@ -58,6 +58,15 @@ static bool validateCommandDecrypt(Context* ctx)
     return true;
 }
 
+static bool validateCommandHash(Context* ctx)
+{
+    if (!is_file(ctx->input)) {
+        ERRO("Input is not a file");
+        return false;
+    }
+    return true;
+}
+
 static bool validateInput(Context* ctx)
 {
     if (!ctx->input) {
@@ -92,6 +101,12 @@ bool ContextValidate(Context* ctx)
 
     if (ctx->command == COMMAND_DECRYPT) {
         if (!validateCommandDecrypt(ctx)) {
+            return false;
+        }
+    }
+
+    if(ctx->command == COMMAND_HASH) {
+        if(!validateCommandHash(ctx)) {
             return false;
         }
     }

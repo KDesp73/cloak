@@ -11,6 +11,7 @@ typedef int (*CommandFunc)(Context*) ;
 
 int CommandEncrypt(Context* ctx);
 int CommandDecrypt(Context* ctx);
+int CommandHash(Context* ctx);
 
 static inline CommandFunc GetCommandFunc(Command command)
 {
@@ -19,6 +20,8 @@ static inline CommandFunc GetCommandFunc(Command command)
         return CommandEncrypt;
     case COMMAND_DECRYPT:
         return CommandDecrypt;
+    case COMMAND_HASH:
+        return CommandHash;
     case COMMAND_NONE:
     default:
         return NULL;
