@@ -25,11 +25,11 @@
 
 int main(int argc, char** argv){
     cli_args_t args = cli_args_make(
-        cli_arg_new(FLAG_HELP, "help", "Prints this message", no_argument),
-        cli_arg_new(FLAG_VERSION, "version", "Prints the program version", no_argument),
-        cli_arg_new(FLAG_KEY, "key", "Specify the encryption/decryption key", required_argument),
-        cli_arg_new(FLAG_INPUT, "input", "Specify the input path", required_argument),
-        cli_arg_new(FLAG_OUTPUT, "output", "Specify the output path", required_argument),
+        cli_arg_new(FLAG_HELP,    "help",    "", no_argument),
+        cli_arg_new(FLAG_VERSION, "version", "", no_argument),
+        cli_arg_new(FLAG_KEY,     "key",     "", required_argument),
+        cli_arg_new(FLAG_INPUT,   "input",   "", required_argument),
+        cli_arg_new(FLAG_OUTPUT,  "output",  "", required_argument),
         NULL
     );
 

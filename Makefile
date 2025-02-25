@@ -32,7 +32,7 @@ else
 endif
 
 # Source and object files
-SRC_FILES := $(shell find $(SRC_DIR) -name '*.c')
+SRC_FILES := $(shell find $(SRC_DIR) -name '*.c' ! -name 'main.c')
 OBJ_FILES = $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRC_FILES))
 
 # Default target
