@@ -48,7 +48,10 @@ int main(int argc, char** argv){
                 CLEANUP(0);
             case FLAG_KEY:
                 ctx.key_random = false;
-                // TODO: Check argument length
+                if(strlen(optarg) >= KEY_SIZE) {
+                    ERRO("key must be shorter than 32 characters");
+                    CLEANUP(1);
+                }
                 memcpy(ctx.key, optarg, KEY_SIZE);
                 break;
             case FLAG_INPUT:
@@ -62,17 +65,16 @@ int main(int argc, char** argv){
         }
     }
 
-    if(!SodiumInit()) return 1;
-
-    if(!ContextValidate(&ctx)) return 1;
+    if(!SodiumInit()) CLEANUP(1);
+    if(!ContextValidate(&ctx)) CLEANUP(1);
 
     CommandFunc exec = GetCommandFunc(command);
     if(!exec) {
-        ERRO("No command specified");
+        ERRO("No method defined for command '%s'", CommandToString(command));
         CLEANUP(1);
     }
 
-    exec(&ctx);
+    int rc = !exec(&ctx);
 
-    CLEANUP(0);
+    CLEANUP(rc);
 }
