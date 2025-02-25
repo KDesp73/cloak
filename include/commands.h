@@ -9,7 +9,6 @@
 
 typedef int (*CommandFunc)(Context*) ;
 
-
 int CommandEncrypt(Context* ctx);
 int CommandDecrypt(Context* ctx);
 
