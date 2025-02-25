@@ -102,9 +102,9 @@ compile_commands.json: $(SRC_FILES) ## Generate compile_commands.json
 
 .PHONY: autocomplete
 autocomplete: ## Generate autocomplete scripts
-	complgen aot ./docs/cloak.usage --zsh-script ./docs/cloak.zsh
-	complgen aot ./docs/cloak.usage --bash-script ./docs/cloak.bash
-	complgen aot ./docs/cloak.usage --fish-script ./docs/cloak.fish
+	complgen aot ./docs/autocomplete/cloak.usage --zsh-script ./docs/autocomplete/cloak.zsh
+	complgen aot ./docs/autocomplete/cloak.usage --bash-script ./docs/autocomplete/cloak.bash
+	complgen aot ./docs/autocomplete/cloak.usage --fish-script ./docs/autocomplete/cloak.fish
 
 ## Show this help message
 .PHONY: help
