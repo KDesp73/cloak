@@ -4,12 +4,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-void GenerateKey(unsigned char key[KEY_SIZE])
+void AESGenerateKey(unsigned char key[KEY_SIZE])
 {
     randombytes_buf(key, KEY_SIZE);
 }
 
-int EncryptFile(const char *input_file, const char *output_file, unsigned char key[KEY_SIZE])
+int AESEncryptFile(const char *input_file, const char *output_file, unsigned char key[KEY_SIZE])
 {
     FILE *fin = fopen(input_file, "rb");
     FILE *fout = fopen(output_file, "wb");
@@ -41,7 +41,7 @@ int EncryptFile(const char *input_file, const char *output_file, unsigned char k
     return 0;
 }
 
-int DecryptFile(const char *input_file, const char *output_file, unsigned char key[KEY_SIZE])
+int AESDecryptFile(const char *input_file, const char *output_file, unsigned char key[KEY_SIZE])
 {
     FILE *fin = fopen(input_file, "rb");
     FILE *fout = fopen(output_file, "wb");
