@@ -8,15 +8,11 @@
 typedef struct {
     int argc;
     char** argv;
-
     Command command;
-
-    unsigned char key[KEY_SIZE];
-    bool key_random;
-
     char* input;
     char* output;
     bool is_dir;
+    char* key;
 } Context;
 
 void ContextInit(Context* ctx, int argc, char** argv);

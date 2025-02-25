@@ -8,3 +8,4 @@ cloak
 libcloak.*
 *.o
 *.txt
+*.key

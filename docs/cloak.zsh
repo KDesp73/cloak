@@ -5,22 +5,23 @@ _cloak_cmd_0 () {
 }
 
 _cloak () {
-    local -a literals=("--help" "--key" "-v" "-k" "-h" "-i" "encrypt" "decrypt" "--input" "-o" "--output" "--version")
+    local -a literals=("--help" "--key" "-v" "-i" "-h" "-k" "encrypt" "decrypt" "--input" "-o" "--output" "--version")
 
     local -A descriptions
     descriptions[3]="Prints the project version"
-    descriptions[4]="Specify the encryption key"
+    descriptions[4]="Specify the input path"
     descriptions[5]="Prints the help message"
-    descriptions[6]="Specify the input path"
+    descriptions[6]="Specify the encryption key path"
     descriptions[7]="Encrypt a file"
     descriptions[8]="Decrypt a file"
     descriptions[10]="Specify the output path"
 
     local -A literal_transitions
-    literal_transitions[1]="([1]=2 [2]=2 [3]=2 [4]=2 [5]=2 [6]=3 [7]=2 [8]=2 [11]=3 [12]=2 [9]=3 [10]=3)"
+    literal_transitions[1]="([7]=2 [8]=2)"
+    literal_transitions[2]="([1]=3 [2]=4 [3]=3 [4]=4 [5]=3 [6]=4 [11]=4 [12]=3 [9]=4 [10]=4)"
 
     local -A match_anything_transitions
-    match_anything_transitions=([3]=2)
+    match_anything_transitions=([4]=3)
 
     declare -A subword_transitions
 
@@ -56,13 +57,13 @@ _cloak () {
 
         return 1
     done
-    declare -A literal_transitions_level_0=([1]="3 4 5 6 7 8 10")
-    declare -A literal_transitions_level_1=([1]="1 2 11 12 9")
+    declare -A literal_transitions_level_0=([2]="3 4 5 6 10" [1]="7 8")
+    declare -A literal_transitions_level_1=([2]="1 2 11 12 9")
     declare -A subword_transitions_level_0=()
     declare -A subword_transitions_level_1=()
     declare -A commands_level_0=()
     declare -A commands_level_1=()
-    declare -A specialized_commands_level_0=([3]="0")
+    declare -A specialized_commands_level_0=([4]="0")
     declare -A specialized_commands_level_1=()
 
      local max_fallback_level=1

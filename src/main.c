@@ -2,6 +2,7 @@
 #include "cli.h"
 #include "commands.h"
 #include "context.h"
+#include "files.h"
 #include "help.h"
 #include "version.h"
 
@@ -24,11 +25,11 @@
 
 int main(int argc, char** argv){
     cli_args_t args = cli_args_make(
-        cli_arg_new('h', "help", "Prints this message", no_argument),
-        cli_arg_new('v', "version", "Prints the program version", no_argument),
-        cli_arg_new('k', "key", "Specify the encryption/decryption key", required_argument),
-        cli_arg_new('i', "input", "Specify the input path", required_argument),
-        cli_arg_new('o', "output", "Specify the output path", required_argument),
+        cli_arg_new(FLAG_HELP, "help", "Prints this message", no_argument),
+        cli_arg_new(FLAG_VERSION, "version", "Prints the program version", no_argument),
+        cli_arg_new(FLAG_KEY, "key", "Specify the encryption/decryption key", required_argument),
+        cli_arg_new(FLAG_INPUT, "input", "Specify the input path", required_argument),
+        cli_arg_new(FLAG_OUTPUT, "output", "Specify the output path", required_argument),
         NULL
     );
 
@@ -36,7 +37,6 @@ int main(int argc, char** argv){
     Context ctx = {.command = command};
     ContextInit(&ctx, argc, argv);
 
-    // TODO: Extract in its own function returning the resulting Context
     int opt;
     LOOP_ARGS(opt, args){
         switch (opt) {
@@ -47,15 +47,12 @@ int main(int argc, char** argv){
                 printf("cloak v%s\n", VERSION);
                 CLEANUP(0);
             case FLAG_KEY:
-                ctx.key_random = false;
-                if(strlen(optarg) >= KEY_SIZE) {
-                    ERRO("key must be shorter than 32 characters");
-                    CLEANUP(1);
-                }
-                memcpy(ctx.key, optarg, KEY_SIZE);
+                ctx.key = strdup(optarg);
                 break;
             case FLAG_INPUT:
                 ctx.input = strdup(optarg);
+                if(is_directory(ctx.input)) 
+                    ctx.is_dir = true;
                 break;
             case FLAG_OUTPUT:
                 ctx.output = strdup(optarg);

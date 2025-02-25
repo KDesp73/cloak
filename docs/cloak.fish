@@ -14,22 +14,23 @@ function _cloak
         set COMP_CWORD (count $COMP_WORDS)
     end
 
-    set literals "--help" "--key" "-v" "-k" "-h" "-i" "encrypt" "decrypt" "--input" "-o" "--output" "--version"
+    set literals "--help" "--key" "-v" "-i" "-h" "-k" "encrypt" "decrypt" "--input" "-o" "--output" "--version"
 
     set descriptions
     set descriptions[3] "Prints the project version"
-    set descriptions[4] "Specify the encryption key"
+    set descriptions[4] "Specify the input path"
     set descriptions[5] "Prints the help message"
-    set descriptions[6] "Specify the input path"
+    set descriptions[6] "Specify the encryption key path"
     set descriptions[7] "Encrypt a file"
     set descriptions[8] "Decrypt a file"
     set descriptions[10] "Specify the output path"
 
     set literal_transitions
-    set literal_transitions[1] "set inputs 1 2 3 4 5 6 7 8 11 12 9 10; set tos 2 2 2 2 2 3 2 2 3 2 3 3"
+    set literal_transitions[1] "set inputs 7 8; set tos 2 2"
+    set literal_transitions[2] "set inputs 1 2 3 4 5 6 11 12 9 10; set tos 3 4 3 4 3 4 4 3 4 4"
 
-    set match_anything_transitions_from 3
-    set match_anything_transitions_to 2
+    set match_anything_transitions_from 4
+    set match_anything_transitions_to 3
 
     set state 1
     set word_index 2
@@ -81,7 +82,7 @@ function _cloak
         end
     end
 
-    set specialized_command_states 3
+    set specialized_command_states 4
     set specialized_command_ids 1
     if contains $state $specialized_command_states
         set index (contains --index $state $specialized_command_states)

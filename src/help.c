@@ -28,12 +28,12 @@ static void footer()
 static void help()
 {
     PB("USAGE");
-    PI("cloak [COMMAND] [OPTIONS...]");
+    PI("cloak [<COMMAND>] <OPTIONS>...");
     printf("\n");
 
     PB("COMMANDS");
-    PI("encode <FILE>  Encode a file");
-    PI("decode <FILE>  Decode a file");
+    PI("encode               Encode a file");
+    PI("decode               Decode a file");
     printf("\n");
 
     PB("OPTIONS");
