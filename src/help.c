@@ -40,7 +40,7 @@ static void help()
     PI("-h --help            Prints this message");
     PI("-v --version         Prints the current version");
     PI("-k --key <KEY>       Specify the encryption key");
-    PI("-i --input <PATH>   Specify the input path");
+    PI("-i --input <PATH>    Specify the input path");
     PI("-o --output <PATH>   Specify the output path");
 
     footer();

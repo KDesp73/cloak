@@ -33,7 +33,7 @@ int main(int argc, char** argv){
     );
 
     Command command = GetCommand(argv[1]);
-    Context ctx = {0};
+    Context ctx = {.command = command};
     ContextInit(&ctx, argc, argv);
 
     // TODO: Extract in its own function returning the resulting Context
@@ -63,6 +63,8 @@ int main(int argc, char** argv){
     }
 
     if(!SodiumInit()) return 1;
+
+    if(!ContextValidate(&ctx)) return 1;
 
     CommandFunc exec = GetCommandFunc(command);
     if(!exec) {
