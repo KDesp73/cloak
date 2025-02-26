@@ -6,6 +6,7 @@ static void help();
 static void encryptHelp();
 static void decryptHelp();
 static void hashHelp();
+static void lsHelp();
 static void footer();
 
 void CLOAK_Help(CLOAK_Command command)
@@ -19,6 +20,9 @@ void CLOAK_Help(CLOAK_Command command)
             break;
         case CLOAK_COMMAND_HASH:
             hashHelp();
+            break;
+        case CLOAK_COMMAND_LS:
+            lsHelp();
             break;
 
         case CLOAK_COMMAND_NONE:
@@ -48,6 +52,7 @@ static void help()
     PI("encode               Encode a file");
     PI("decode               Decode a file");
     PI("hash                 Prints the hash of a file");
+    PI("ls                   Lists the files considered in the cryptographic process");
     printf("\n");
 
     PB("OPTIONS");
@@ -98,6 +103,17 @@ static void hashHelp()
 {
     PB("USAGE");
     PI("cloak hash -i <PATH>");
+    printf("\n");
+
+    PB("OPTIONS");
+    PI("-h --help            Prints this message");
+    PI("-i --input <PATH>    Specify the input path");
+}
+
+static void lsHelp()
+{
+    PB("USAGE");
+    PI("cloak ls [-i <PATH>]");
     printf("\n");
 
     PB("OPTIONS");

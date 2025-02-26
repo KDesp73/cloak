@@ -1,13 +1,15 @@
-cloak <COMMANDS> <OPTIONS>;
+cloak <COMMANDS> | <HELP> || <VERSION>;
 
-<COMMANDS> ::= (encrypt) "Encrypt a file"
-			 | (decrypt) "Decrypt a file" 
-			 | (hash) "Prints the hash of a file" 
+<COMMANDS> ::= (encrypt <INPUT> [<OUTPUT>]) "Encrypt a file"
+			 | (decrypt <INPUT> <OUTPUT> [<KEY>]) "Decrypt a file" 
+			 | (hash <INPUT>) "Prints the hash of a file" 
+             | (ls [<INPUT>]) "Lists the files considered in the cryptographic process"
 			 ;
 
-<OPTIONS> ::= (-h || --help) "Prints the help message"
-			| (-v || --version) "Prints the project version"
-            | (-k <PATH> || --key <PATH>) "Specify the encryption key path"
-            | (-i <PATH> || --input <PATH>) "Specify the input path"
-            | (-o <PATH> || --output <PATH>) "Specify the output path"
-			;
+
+<HELP>   ::= (-h || --help) "Prints the help message";
+<VERSION> ::= (-v || --version) "Prints the project version";
+<INPUT>   ::= (-i <PATH> || --input <PATH>) "Specify the input path";
+<OUTPUT>  ::= (-o <PATH> || --output <PATH>) "Specify the output path";
+<KEY>     ::= (-k <PATH> || --key <PATH>) "Specify the encryption key path";
+
