@@ -45,6 +45,14 @@ static inline char* file_extension(const char* path)
     return (dot && dot != path) ? dot + 1 : "";
 }
 
+static inline int file_delete(const char *filename) {
+    if (remove(filename) == 0) {
+        return true;
+    } else {
+        perror("File deletion failed");
+        return false;
+    }
+}
 
 #ifdef CLOAK_REMOVE_PREFIXES
 #endif // CLOAK_REMOVE_PREFIXES

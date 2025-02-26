@@ -27,6 +27,7 @@ static inline CLOAK_CommandFunc CLOAK_GetCommandFunc(CLOAK_Command command)
         return NULL;
     }
 }
+
 #ifdef CLOAK_REMOVE_PREFIXES
 #define CommandFunc CLOAK_CommandFunc
 

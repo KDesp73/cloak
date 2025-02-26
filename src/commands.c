@@ -1,7 +1,10 @@
 #include "commands.h"
 #include "aes.h"
+#include "compression.h"
 #include "extern/logging.h"
+#include "files.h"
 #include "hashing.h"
+#include <stdlib.h>
 
 static int encryptFile(const char* in, const char* out, unsigned char key[CLOAK_KEY_SIZE])
 {
@@ -19,11 +22,19 @@ static int encryptFile(const char* in, const char* out, unsigned char key[CLOAK_
         }
     }
 
-    if (CLOAK_AESEncryptFile(in, output, key) != 0) {
+    char* zip = NULL;
+    asprintf(&zip, "%s.bin", in);
+    CLOAK_Compress(in, zip);
+
+    if (CLOAK_AESEncryptFile(zip, output, key) != 0) {
         ERRO("Encryption of file %s failed.", in);
+        file_delete(zip);
+        free(zip);
         free(output);
         return false;
     }
+    file_delete(zip);
+    free(zip);
     free(output);
     return true;
 }
@@ -56,6 +67,24 @@ int CLOAK_CommandEncrypt(CLOAK_Context* ctx)
     return true;
 }
 
+int decryptFile(const char* in, const char* out, unsigned char key[CLOAK_KEY_SIZE])
+{
+    char* zip = NULL;
+    asprintf(&zip, "%s.bin", in);
+
+    if (CLOAK_AESDecryptFile(in, zip, key) != 0) {
+        ERRO("Decryption of file %s failed.", in);
+        return false;
+    }
+
+    if(CLOAK_Decompress(zip, out) != 0){
+        ERRO("Failed decompressing file %s", in);
+        return false;
+    }
+
+    return true;
+}
+
 int CLOAK_CommandDecrypt(CLOAK_Context* ctx)
 {
     unsigned char key[CLOAK_KEY_SIZE];
@@ -75,10 +104,8 @@ int CLOAK_CommandDecrypt(CLOAK_Context* ctx)
     if (ctx->is_dir) {
         TODO("Handle directory decryption");
     } else {
-        if (CLOAK_AESDecryptFile(ctx->input, ctx->output, key) != 0) {
-            ERRO("Decryption of file %s failed.", ctx->input);
+        if(!decryptFile(ctx->input, ctx->output, key))
             return false;
-        }
     }
 
     

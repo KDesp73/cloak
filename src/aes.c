@@ -56,6 +56,21 @@ int CLOAK_AESEncryptFile(const char *input_file, const char *output_file, unsign
     return 0;
 }
 
+int CLOAK_AESEncryptChunk(const unsigned char *input, size_t input_size,
+                          unsigned char *output, size_t *output_size,
+                          const unsigned char key[crypto_secretbox_KEYBYTES],
+                          unsigned char nonce[crypto_secretbox_NONCEBYTES])
+{
+    if (input_size + crypto_secretbox_MACBYTES > *output_size) {
+        fprintf(stderr, "Output buffer too small for encryption\n");
+        return -1;
+    }
+
+    crypto_secretbox_easy(output, input, input_size, nonce, key);
+    *output_size = input_size + crypto_secretbox_MACBYTES;
+    return 0;
+}
+
 int CLOAK_AESDecryptFile(const char *input_file, const char *output_file, unsigned char key[CLOAK_KEY_SIZE])
 {
     FILE *fin = fopen(input_file, "rb");
@@ -135,6 +150,25 @@ int CLOAK_AESDecryptFile(const char *input_file, const char *output_file, unsign
         return -1;
     }
 
+    return 0;
+}
+
+int CLOAK_AESDecryptChunk(const unsigned char *input, size_t input_size,
+                          unsigned char *output, size_t *output_size,
+                          const unsigned char key[crypto_secretbox_KEYBYTES],
+                          const unsigned char nonce[crypto_secretbox_NONCEBYTES])
+{
+    if (input_size < crypto_secretbox_MACBYTES) {
+        fprintf(stderr, "Invalid input size for decryption\n");
+        return -1;
+    }
+
+    if (crypto_secretbox_open_easy(output, input, input_size, nonce, key) != 0) {
+        fprintf(stderr, "Decryption failed\n");
+        return -1;
+    }
+
+    *output_size = input_size - crypto_secretbox_MACBYTES;
     return 0;
 }
 
