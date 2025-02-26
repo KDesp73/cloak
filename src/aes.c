@@ -2,13 +2,14 @@
 #include "extern/logging.h"
 #include "hashing.h"
 #include <sodium.h>
+#include <sodium/crypto_secretbox.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 void CLOAK_AESGenerateKey(unsigned char key[CLOAK_KEY_SIZE])
 {
-    randombytes_buf(key, CLOAK_KEY_SIZE);
+    crypto_secretbox_keygen(key);
 }
 
 int CLOAK_AESEncryptFile(const char *input_file, const char *output_file, unsigned char key[CLOAK_KEY_SIZE])

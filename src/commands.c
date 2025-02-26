@@ -74,14 +74,20 @@ int decryptFile(const char* in, const char* out, unsigned char key[CLOAK_KEY_SIZ
 
     if (CLOAK_AESDecryptFile(in, zip, key) != 0) {
         ERRO("Decryption of file %s failed.", in);
+        file_delete(zip);
+        free(zip);
         return false;
     }
 
     if(CLOAK_Decompress(zip, out) != 0){
         ERRO("Failed decompressing file %s", in);
+        file_delete(zip);
+        free(zip);
         return false;
     }
 
+    file_delete(zip);
+    free(zip);
     return true;
 }
 
