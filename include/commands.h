@@ -12,6 +12,7 @@ typedef int (*CLOAK_CommandFunc)(CLOAK_Context*) ;
 int CLOAK_CommandEncrypt(CLOAK_Context* ctx);
 int CLOAK_CommandDecrypt(CLOAK_Context* ctx);
 int CLOAK_CommandHash(CLOAK_Context* ctx);
+int CLOAK_CommandLs(CLOAK_Context* ctx);
 
 static inline CLOAK_CommandFunc CLOAK_GetCommandFunc(CLOAK_Command command)
 {
@@ -22,6 +23,8 @@ static inline CLOAK_CommandFunc CLOAK_GetCommandFunc(CLOAK_Command command)
         return CLOAK_CommandDecrypt;
     case CLOAK_COMMAND_HASH:
         return CLOAK_CommandHash;
+    case CLOAK_COMMAND_LS:
+        return CLOAK_CommandLs;
     case CLOAK_COMMAND_NONE:
     default:
         return NULL;

@@ -44,12 +44,6 @@ static bool validateCommandDecrypt(CLOAK_Context* ctx)
         return false;
     }
     
-
-    if (!ctx->key) {
-        ERRO("Provide a path for the key");
-        return false;
-    }
-    
     if (!is_file(ctx->key)) {
         ERRO("%s is not a file", ctx->key);
         return false;

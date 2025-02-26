@@ -4,7 +4,9 @@
 #include "extern/logging.h"
 #include "files.h"
 #include "hashing.h"
+#include "listing.h"
 #include <stdlib.h>
+#include <string.h>
 
 static int encryptFile(const char* in, const char* out, unsigned char key[CLOAK_KEY_SIZE])
 {
@@ -93,8 +95,15 @@ int decryptFile(const char* in, const char* out, unsigned char key[CLOAK_KEY_SIZ
 
 int CLOAK_CommandDecrypt(CLOAK_Context* ctx)
 {
+    const char* key_path = NULL;
+    if(ctx->key){
+        key_path = ctx->key;
+    } else {
+        key_path = CLOAK_KEY_FILE;
+    }
+
     unsigned char key[CLOAK_KEY_SIZE];
-    FILE* key_file = fopen(CLOAK_KEY_FILE, "rb");
+    FILE* key_file = fopen(key_path, "rb");
     if (!key_file) {
         ERRO("Failed to open key file for reading.");
         return false;
@@ -127,3 +136,12 @@ int CLOAK_CommandHash(CLOAK_Context* ctx)
     return true;
 }
 
+int CLOAK_CommandLs(CLOAK_Context* ctx)
+{
+    CLOAK_List list = {0};
+    CLOAK_ListLoad(&list, ctx->input);
+    CLOAK_ListPrint(&list);
+    CLOAK_ListFree(&list);
+
+    return true;
+}
