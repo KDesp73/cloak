@@ -138,8 +138,10 @@ int CLOAK_CommandHash(CLOAK_Context* ctx)
 
 int CLOAK_CommandLs(CLOAK_Context* ctx)
 {
+    const char* path = (ctx->input) ? ctx->input : ".";
+
     CLOAK_List list = {0};
-    CLOAK_ListLoad(&list, ctx->input);
+    CLOAK_ListLoad(&list, path);
     CLOAK_ListPrint(&list);
     CLOAK_ListFree(&list);
 

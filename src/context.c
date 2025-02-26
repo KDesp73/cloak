@@ -63,6 +63,7 @@ static bool validateCommandHash(CLOAK_Context* ctx)
 
 static bool validateInput(CLOAK_Context* ctx)
 {
+    if(ctx->command == CLOAK_COMMAND_LS) return true; // NOTE: Input defaults to `.`
     if (!ctx->input) {
         ERRO("Input path is not specified");
         return false;
