@@ -7,6 +7,15 @@
 #include <stdlib.h>
 #include <string.h>
 
+static bool sodiumInit(void)
+{
+    if (sodium_init() < 0) {
+        fprintf(stderr, "libsodium initialization failed!\n");
+        return false;
+    }
+    return true;
+}
+
 void CLOAK_AESGenerateKey(unsigned char key[CLOAK_KEY_SIZE])
 {
     crypto_secretbox_keygen(key);
@@ -14,6 +23,7 @@ void CLOAK_AESGenerateKey(unsigned char key[CLOAK_KEY_SIZE])
 
 int CLOAK_AESEncryptFile(const char *input_file, const char *output_file, unsigned char key[CLOAK_KEY_SIZE])
 {
+    if(!sodiumInit()) return -1;
     FILE *fin = fopen(input_file, "rb");
     FILE *fout = fopen(output_file, "wb");
     if (!fin || !fout) {
@@ -62,6 +72,7 @@ int CLOAK_AESEncryptChunk(const unsigned char *input, size_t input_size,
                           const unsigned char key[crypto_secretbox_KEYBYTES],
                           unsigned char nonce[crypto_secretbox_NONCEBYTES])
 {
+    if(!sodiumInit()) return -1;
     if (input_size + crypto_secretbox_MACBYTES > *output_size) {
         fprintf(stderr, "Output buffer too small for encryption\n");
         return -1;
@@ -74,6 +85,7 @@ int CLOAK_AESEncryptChunk(const unsigned char *input, size_t input_size,
 
 int CLOAK_AESDecryptFile(const char *input_file, const char *output_file, unsigned char key[CLOAK_KEY_SIZE])
 {
+    if(!sodiumInit()) return -1;
     FILE *fin = fopen(input_file, "rb");
     if (!fin) {
         perror("File open error");
@@ -159,6 +171,7 @@ int CLOAK_AESDecryptChunk(const unsigned char *input, size_t input_size,
                           const unsigned char key[crypto_secretbox_KEYBYTES],
                           const unsigned char nonce[crypto_secretbox_NONCEBYTES])
 {
+    if(!sodiumInit()) return -1;
     if (input_size < crypto_secretbox_MACBYTES) {
         fprintf(stderr, "Invalid input size for decryption\n");
         return -1;

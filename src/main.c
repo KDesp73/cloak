@@ -1,6 +1,5 @@
 #define CLOAK_REMOVE_PREFIXES
 
-#include "aes.h"
 #include "cli.h"
 #include "commands.h"
 #include "context.h"
@@ -35,7 +34,7 @@ int main(int argc, char** argv){
         NULL
     );
 
-    CLOAK_Command command = CLOAK_GetCommand(argv[1]);
+    Command command = GetCommand(argv[1]);
     Context ctx = {.command = command};
     CLOAK_ContextInit(&ctx, argc, argv);
 
@@ -64,7 +63,6 @@ int main(int argc, char** argv){
         }
     }
 
-    if(!SodiumInit()) CLEANUP(1);
     if(!ContextValidate(&ctx)) CLEANUP(1);
 
     CommandFunc exec = GetCommandFunc(command);

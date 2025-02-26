@@ -24,12 +24,14 @@ CLOAK_Command CLOAK_GetCommand(const char* command);
 #define COMMAND_ENCRYPT CLOAK_COMMAND_ENCRYPT
 #define COMMAND_DECRYPT CLOAK_COMMAND_DECRYPT
 #define COMMAND_HASH CLOAK_COMMAND_HASH
+#define Command CLOAK_Command
 
 #define FLAG_HELP CLOAK_FLAG_HELP
 #define FLAG_VERSION CLOAK_FLAG_VERSION
 #define FLAG_KEY CLOAK_FLAG_KEY
 #define FLAG_INPUT CLOAK_FLAG_INPUT
 #define FLAG_OUTPUT CLOAK_FLAG_OUTPUT
+#define Flag CLOAK_Flag
 
 #define CommandToString CLOAK_CommandToString
 #define GetCommand CLOAK_GetCommand
