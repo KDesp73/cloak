@@ -148,6 +148,48 @@ size_t CLOAK_ListLoad(CLOAK_List* list, const char* path)
     return loaded_count; // Return the total count of loaded files
 }
 
+size_t CLOAK_ListLoadEncrypted(CLOAK_List* list, const char* path)
+{
+    DIR* dir = opendir(path);
+    if (!dir) {
+        perror("Failed to open directory");
+        return 0;
+    }
+
+    struct dirent* entry;
+    char full_path[PATH_MAX];
+    size_t loaded_count = 0;
+
+    while ((entry = readdir(dir))) {
+        // Skip . and ..
+        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
+            continue;
+        }
+
+        if (entry->d_type == DT_REG) {
+            const char* ext = strrchr(entry->d_name, '.');
+            if (ext && strcmp(ext, ".cloak") == 0) {
+                snprintf(full_path, sizeof(full_path), "%s/%s", path, entry->d_name);
+                
+                char** new_files = realloc(list->files, (list->count + 1) * sizeof(char*));
+                if (!new_files) {
+                    closedir(dir);
+                    return loaded_count;
+                }
+                list->files = new_files;
+                
+                list->files[list->count++] = strdup(full_path);
+                loaded_count++;
+            }
+        } else if (entry->d_type == DT_DIR) {
+            loaded_count += CLOAK_ListLoadEncrypted(list, full_path);
+        }
+    }
+
+    closedir(dir);
+    return loaded_count; // Return the total count of loaded .cloak files
+}
+
 void CLOAK_ListFree(CLOAK_List* list)
 {
     for(size_t i = 0; i < list->count; i++) {

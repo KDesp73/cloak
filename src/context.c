@@ -34,17 +34,12 @@ static bool validateCommandEncrypt(CLOAK_Context* ctx)
 
 static bool validateCommandDecrypt(CLOAK_Context* ctx)
 {
-    if (!ctx->output) {
-        ERRO("Output path is not specified");
-        return false;
-    }
-
-    if (strcmp(file_extension(ctx->input), "cloak") != 0) {
+    if (is_file(ctx->input) && strcmp(file_extension(ctx->input), "cloak") != 0) {
         ERRO("Input file must use `.cloak` as the extension");
         return false;
     }
     
-    if (!is_file(ctx->key)) {
+    if (ctx->key && !is_file(ctx->key)) {
         ERRO("%s is not a file", ctx->key);
         return false;
     }

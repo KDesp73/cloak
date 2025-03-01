@@ -52,7 +52,7 @@ static void help()
     PI("encode               Encode a file");
     PI("decode               Decode a file");
     PI("hash                 Prints the hash of a file");
-    PI("ls                   Lists the files considered in the cryptographic process");
+    PI("ls                   Lists the files considered in the encryption process");
     printf("\n");
 
     PB("OPTIONS");

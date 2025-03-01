@@ -1,13 +1,13 @@
 cloak <COMMANDS> | <HELP> || <VERSION>;
 
 <COMMANDS> ::= (encrypt <INPUT> [<OUTPUT>]) "Encrypt a file"
-			 | (decrypt <INPUT> <OUTPUT> [<KEY>]) "Decrypt a file" 
+			 | (decrypt <INPUT> [<OUTPUT>] [<KEY>]) "Decrypt a file" 
 			 | (hash <INPUT>) "Prints the hash of a file" 
-             | (ls [<INPUT>]) "Lists the files considered in the cryptographic process"
+             | (ls [<INPUT>]) "Lists the files considered in the encryption process"
 			 ;
 
 
-<HELP>   ::= (-h || --help) "Prints the help message";
+<HELP>    ::= (-h || --help) "Prints the help message";
 <VERSION> ::= (-v || --version) "Prints the project version";
 <INPUT>   ::= (-i <PATH> || --input <PATH>) "Specify the input path";
 <OUTPUT>  ::= (-o <PATH> || --output <PATH>) "Specify the output path";

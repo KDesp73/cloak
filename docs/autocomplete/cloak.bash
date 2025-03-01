@@ -11,17 +11,17 @@ _cloak () {
     local words cword
     _get_comp_words_by_ref -n "$COMP_WORDBREAKS" words cword
 
-    declare -a literals=(--key --help -i -k encrypt decrypt hash -o --output --version ls -v -h --input)
+    declare -a literals=(--key --help -i -k encrypt decrypt ls hash -o --output --version -v -h --input)
     declare -A literal_transitions=()
-    literal_transitions[0]="([1]=1 [10]=2 [11]=1 [12]=1 [4]=3 [5]=4 [6]=5 [9]=1)"
-    literal_transitions[2]="([2]=7 [13]=7)"
-    literal_transitions[3]="([2]=8 [13]=8)"
-    literal_transitions[4]="([2]=12 [13]=12)"
-    literal_transitions[5]="([2]=7 [13]=7)"
-    literal_transitions[6]="([0]=7 [3]=7)"
-    literal_transitions[10]="([8]=7 [7]=7)"
-    literal_transitions[11]="([8]=9 [7]=9)"
-    declare -A match_anything_transitions=([9]=6 [7]=1 [12]=11 [8]=10)
+    literal_transitions[0]="([1]=1 [11]=1 [12]=1 [4]=2 [5]=3 [6]=4 [7]=5 [10]=1)"
+    literal_transitions[2]="([2]=9 [13]=9)"
+    literal_transitions[3]="([2]=12 [13]=12)"
+    literal_transitions[4]="([2]=8 [13]=8)"
+    literal_transitions[5]="([2]=8 [13]=8)"
+    literal_transitions[7]="([0]=8 [3]=8)"
+    literal_transitions[10]="([9]=8 [8]=8)"
+    literal_transitions[11]="([0]=8 [9]=6 [3]=8 [8]=6)"
+    declare -A match_anything_transitions=([6]=7 [9]=10 [12]=11 [8]=1)
     declare -A subword_transitions
 
     local state=0
@@ -58,13 +58,13 @@ _cloak () {
         return 1
     done
 
-    declare -A literal_transitions_level_0=([2]="2" [0]="10 11 12 4 5 6" [11]="7" [10]="7" [6]="3" [5]="2" [4]="2" [3]="2")
-    declare -A literal_transitions_level_1=([2]="13" [0]="1 9" [11]="8" [10]="8" [6]="0" [5]="13" [4]="13" [3]="13")
+    declare -A literal_transitions_level_0=([2]="2" [11]="3 8" [0]="11 12 4 5 6 7" [7]="3" [10]="8" [5]="2" [4]="2" [3]="2")
+    declare -A literal_transitions_level_1=([2]="13" [11]="0 9" [0]="1 10" [7]="0" [10]="9" [5]="13" [4]="13" [3]="13")
     declare -A subword_transitions_level_0=()
     declare -A subword_transitions_level_1=()
     declare -A commands_level_0=()
     declare -A commands_level_1=()
-    declare -A specialized_commands_level_0=([9]="0" [12]="0" [7]="0" [8]="0")
+    declare -A specialized_commands_level_0=([8]="0" [9]="0" [12]="0" [6]="0")
     declare -A specialized_commands_level_1=()
 
     local -a matches=()

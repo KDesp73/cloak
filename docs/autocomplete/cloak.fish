@@ -14,31 +14,31 @@ function _cloak
         set COMP_CWORD (count $COMP_WORDS)
     end
 
-    set literals "--key" "--help" "-i" "-k" "encrypt" "decrypt" "hash" "-o" "--output" "--version" "ls" "-v" "-h" "--input"
+    set literals "--key" "--help" "-i" "-k" "encrypt" "decrypt" "ls" "hash" "-o" "--output" "--version" "-v" "-h" "--input"
 
     set descriptions
     set descriptions[3] "Specify the input path"
     set descriptions[4] "Specify the encryption key path"
     set descriptions[5] "Encrypt a file"
     set descriptions[6] "Decrypt a file"
-    set descriptions[7] "Prints the hash of a file"
-    set descriptions[8] "Specify the output path"
-    set descriptions[11] "Lists the files considered in the cryptographic process"
+    set descriptions[7] "Lists the files considered in the encryption process"
+    set descriptions[8] "Prints the hash of a file"
+    set descriptions[9] "Specify the output path"
     set descriptions[12] "Prints the project version"
     set descriptions[13] "Prints the help message"
 
     set literal_transitions
-    set literal_transitions[1] "set inputs 2 11 12 13 5 6 7 10; set tos 2 3 2 2 4 5 6 2"
-    set literal_transitions[3] "set inputs 3 14; set tos 8 8"
-    set literal_transitions[4] "set inputs 3 14; set tos 9 9"
-    set literal_transitions[5] "set inputs 3 14; set tos 13 13"
-    set literal_transitions[6] "set inputs 3 14; set tos 8 8"
-    set literal_transitions[7] "set inputs 1 4; set tos 8 8"
-    set literal_transitions[11] "set inputs 9 8; set tos 8 8"
-    set literal_transitions[12] "set inputs 9 8; set tos 10 10"
+    set literal_transitions[1] "set inputs 2 12 13 5 6 7 8 11; set tos 2 2 2 3 4 5 6 2"
+    set literal_transitions[3] "set inputs 3 14; set tos 10 10"
+    set literal_transitions[4] "set inputs 3 14; set tos 13 13"
+    set literal_transitions[5] "set inputs 3 14; set tos 9 9"
+    set literal_transitions[6] "set inputs 3 14; set tos 9 9"
+    set literal_transitions[8] "set inputs 1 4; set tos 9 9"
+    set literal_transitions[11] "set inputs 10 9; set tos 9 9"
+    set literal_transitions[12] "set inputs 1 10 4 9; set tos 9 7 9 7"
 
-    set match_anything_transitions_from 10 8 13 9
-    set match_anything_transitions_to 7 2 12 11
+    set match_anything_transitions_from 7 10 13 9
+    set match_anything_transitions_to 8 11 12 2
 
     set state 1
     set word_index 2
@@ -90,7 +90,7 @@ function _cloak
         end
     end
 
-    set specialized_command_states 10 13 8 9
+    set specialized_command_states 9 10 13 7
     set specialized_command_ids 4 4 4 4
     if contains $state $specialized_command_states
         set index (contains --index $state $specialized_command_states)
