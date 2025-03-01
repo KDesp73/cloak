@@ -26,11 +26,12 @@
 
 int main(int argc, char** argv){
     cli_args_t args = cli_args_make(
-        cli_arg_new(FLAG_HELP,    "help",    "", no_argument),
-        cli_arg_new(FLAG_VERSION, "version", "", no_argument),
-        cli_arg_new(FLAG_KEY,     "key",     "", required_argument),
-        cli_arg_new(FLAG_INPUT,   "input",   "", required_argument),
-        cli_arg_new(FLAG_OUTPUT,  "output",  "", required_argument),
+        cli_arg_new(FLAG_HELP,      "help",    "", no_argument),
+        cli_arg_new(FLAG_VERSION,   "version", "", no_argument),
+        cli_arg_new(FLAG_KEY,       "key",     "", required_argument),
+        cli_arg_new(FLAG_INPUT,     "input",   "", required_argument),
+        cli_arg_new(FLAG_OUTPUT,    "output",  "", required_argument),
+        cli_arg_new(FLAG_GITIGNORE_IGNORE, "gitignore-ignore", "", no_argument),
         NULL
     );
 
@@ -57,6 +58,9 @@ int main(int argc, char** argv){
                 break;
             case FLAG_OUTPUT:
                 ctx.output = strdup(optarg);
+                break;
+            case FLAG_GITIGNORE_IGNORE:
+                ctx.include_gitignore = false;
                 break;
             default:
                 CLEANUP(1);

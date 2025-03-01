@@ -13,6 +13,7 @@ void CLOAK_ContextInit(CLOAK_Context* ctx, int argc, char** argv)
     ctx->is_dir = false;
     ctx->argc = argc;
     ctx->argv = argv;
+    ctx->include_gitignore = true;
 }
 
 void CLOAK_ContextFree(CLOAK_Context* ctx)

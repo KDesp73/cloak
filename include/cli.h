@@ -15,6 +15,7 @@ typedef enum {
     CLOAK_FLAG_KEY = 'k',
     CLOAK_FLAG_INPUT = 'i',
     CLOAK_FLAG_OUTPUT = 'o',
+    CLOAK_FLAG_GITIGNORE_IGNORE = 'G',
 } CLOAK_Flag;
 
 char* CLOAK_CommandToString(CLOAK_Command c);
@@ -32,6 +33,7 @@ CLOAK_Command CLOAK_GetCommand(const char* command);
 #define FLAG_KEY CLOAK_FLAG_KEY
 #define FLAG_INPUT CLOAK_FLAG_INPUT
 #define FLAG_OUTPUT CLOAK_FLAG_OUTPUT
+#define FLAG_GITIGNORE_IGNORE CLOAK_FLAG_GITIGNORE_IGNORE
 #define Flag CLOAK_Flag
 
 #define CommandToString CLOAK_CommandToString

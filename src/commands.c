@@ -6,12 +6,12 @@
 #include "files.h"
 #include "hashing.h"
 #include "listing.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <errno.h>
 
 static int encryptFile(const char* in, const char* out, unsigned char key[CLOAK_KEY_SIZE])
 {
@@ -55,7 +55,7 @@ int CLOAK_CommandEncrypt(CLOAK_Context* ctx)
 
     if (ctx->is_dir) {
         CLOAK_List list = {0};
-        CLOAK_ListLoad(&list, ctx->input);
+        CLOAK_ListLoad(&list, ctx->input, ctx->include_gitignore);
 
         for (size_t i = 0; i < list.count; i++) {
             if(!encryptFile(list.files[i], NULL, key))
@@ -135,24 +135,12 @@ int decryptFile(const char* in, const char* out, unsigned char key[CLOAK_KEY_SIZ
     return true;
 }
 
-static int createDirectory(const char* path) {
-    struct stat st = {0};
-
-    if (stat(path, &st) == -1) { // Check if the directory exists
-        if (mkdir(path, 0777) != 0 && errno != EEXIST) { // Try to create it
-            ERRO("Failed to create directory '%s'", path);
-            return 0;
-        }
-    }
-    return 1;
-}
-
 static int decryptMultiple(const char* in, const char* out, unsigned char key[CLOAK_KEY_SIZE])
 {
     CLOAK_List list = {0};
     CLOAK_ListLoadEncrypted(&list, in);
 
-    if (out && !createDirectory(out)) { // Ensure the output directory exists
+    if (out && !dir_create(out)) { // Ensure the output directory exists
         CLOAK_ListFree(&list);
         return 0;
     }
@@ -177,7 +165,7 @@ static int decryptMultiple(const char* in, const char* out, unsigned char key[CL
             char* last_slash = strrchr(final_output, '/');
             if (last_slash) {
                 *last_slash = '\0'; // Temporarily terminate at last directory separator
-                createDirectory(final_output); // Create the parent directories
+                dir_create(final_output); // Create the parent directories
                 *last_slash = '/'; // Restore full path
             }
         } else {
@@ -246,7 +234,7 @@ int CLOAK_CommandLs(CLOAK_Context* ctx)
     const char* path = (ctx->input) ? ctx->input : ".";
 
     CLOAK_List list = {0};
-    CLOAK_ListLoad(&list, path);
+    CLOAK_ListLoad(&list, path, ctx->include_gitignore);
     CLOAK_ListPrint(&list);
     CLOAK_ListFree(&list);
 

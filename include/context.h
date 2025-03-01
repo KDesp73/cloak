@@ -1,7 +1,6 @@
 #ifndef CONTEXT_H
 #define CONTEXT_H
 
-#include "aes.h"
 #include "cli.h"
 #include <stdbool.h>
 
@@ -13,6 +12,7 @@ typedef struct {
     char* output;
     bool is_dir;
     char* key;
+    bool include_gitignore;
 } CLOAK_Context;
 
 void CLOAK_ContextInit(CLOAK_Context* ctx, int argc, char** argv);

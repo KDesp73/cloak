@@ -1,9 +1,9 @@
 cloak <COMMANDS> | <HELP> || <VERSION>;
 
-<COMMANDS> ::= (encrypt <INPUT> [<OUTPUT>]) "Encrypt a file"
+<COMMANDS> ::= (encrypt <INPUT> [<OUTPUT>] [<GI-IGNORE>]) "Encrypt a file"
 			 | (decrypt <INPUT> [<OUTPUT>] [<KEY>]) "Decrypt a file" 
 			 | (hash <INPUT>) "Prints the hash of a file" 
-             | (ls [<INPUT>]) "Lists the files considered in the encryption process"
+             | (ls [<INPUT>] [<GI-IGNORE>]) "Lists the files considered in the encryption process"
 			 ;
 
 
@@ -12,4 +12,5 @@ cloak <COMMANDS> | <HELP> || <VERSION>;
 <INPUT>   ::= (-i <PATH> || --input <PATH>) "Specify the input path";
 <OUTPUT>  ::= (-o <PATH> || --output <PATH>) "Specify the output path";
 <KEY>     ::= (-k <PATH> || --key <PATH>) "Specify the encryption key path";
+<GI-IGNORE> ::= (-G || --gitignore-ignore) "Do not include the gitignore patterns alongside cloakignore";
 

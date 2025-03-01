@@ -1,6 +1,7 @@
 #ifndef FILES_H
 #define FILES_H
 
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -53,6 +54,19 @@ static inline int file_delete(const char *filename) {
         return false;
     }
 }
+
+static inline int dir_create(const char* path)
+{
+    struct stat st = {0};
+
+    if (stat(path, &st) == -1) { // Check if the directory exists
+        if (mkdir(path, 0777) != 0 && errno != EEXIST) { // Try to create it
+            return 0;
+        }
+    }
+    return 1;
+}
+
 
 #ifdef CLOAK_REMOVE_PREFIXES
 #endif // CLOAK_REMOVE_PREFIXES

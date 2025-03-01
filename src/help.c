@@ -49,18 +49,19 @@ static void help()
     printf("\n");
 
     PB("COMMANDS");
-    PI("encode               Encode a file");
-    PI("decode               Decode a file");
-    PI("hash                 Prints the hash of a file");
-    PI("ls                   Lists the files considered in the encryption process");
+    PI("encrypt                Encrypt a file");
+    PI("decrypt                Decrypt a file");
+    PI("hash                   Prints the hash of a file");
+    PI("ls                     Lists the files considered in the encryption process");
     printf("\n");
 
     PB("OPTIONS");
-    PI("-h --help            Prints this message");
-    PI("-v --version         Prints the current version");
-    PI("-k --key <PATH>      Specify the encryption key path");
-    PI("-i --input <PATH>    Specify the input path");
-    PI("-o --output <PATH>   Specify the output path");
+    PI("-h --help              Prints this message");
+    PI("-v --version           Prints the current version");
+    PI("-k --key <PATH>        Specify the encryption key path");
+    PI("-i --input <PATH>      Specify the input path");
+    PI("-o --output <PATH>     Specify the output path");
+    PI("-G --gitignore-ignore  Do not include the gitignore patterns alongside cloakignore");
 }
 
 static void encryptHelp()
@@ -70,9 +71,10 @@ static void encryptHelp()
     printf("\n");
 
     PB("OPTIONS");
-    PI("-h --help            Prints this message");
-    PI("-i --input <PATH>    Specify the input path");
-    PI("-o --output <PATH>   Specify the output path");
+    PI("-h --help              Prints this message");
+    PI("-i --input <PATH>      Specify the input path");
+    PI("-o --output <PATH>     Specify the output path");
+    PI("-G --gitignore-ignore  Do not include the gitignore patterns alongside cloakignore");
     printf("\n");
 
     PB("NOTES");
@@ -93,10 +95,10 @@ static void decryptHelp()
     printf("\n");
 
     PB("OPTIONS");
-    PI("-h --help            Prints this message");
-    PI("-i --input <PATH>    Specify the input path");
-    PI("-o --output <PATH>   Specify the output path");
-    PI("-k --key <PATH>      Specify the encryption key path");
+    PI("-h --help              Prints this message");
+    PI("-i --input <PATH>      Specify the input path");
+    PI("-o --output <PATH>     Specify the output path");
+    PI("-k --key <PATH>        Specify the encryption key path");
 }
 
 static void hashHelp()
@@ -106,8 +108,8 @@ static void hashHelp()
     printf("\n");
 
     PB("OPTIONS");
-    PI("-h --help            Prints this message");
-    PI("-i --input <PATH>    Specify the input path");
+    PI("-h --help              Prints this message");
+    PI("-i --input <PATH>      Specify the input path");
 }
 
 static void lsHelp()
@@ -117,6 +119,7 @@ static void lsHelp()
     printf("\n");
 
     PB("OPTIONS");
-    PI("-h --help            Prints this message");
-    PI("-i --input <PATH>    Specify the input path");
+    PI("-h --help              Prints this message");
+    PI("-i --input <PATH>      Specify the input path");
+    PI("-G --gitignore-ignore  Do not include the gitignore patterns alongside cloakignore");
 }
