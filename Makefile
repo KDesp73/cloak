@@ -1,7 +1,7 @@
 # Compiler and flags
 CC = gcc
 CFLAGS = -Wall -Werror -Iinclude -fPIC
-LDFLAGS = -Llib -l:libsodium.a -l:libz.a
+LDFLAGS = -Llib -l:libsodium.a -l:libz.a -lcurl
 
 # Directories
 SRC_DIR = src

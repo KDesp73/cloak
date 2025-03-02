@@ -5,37 +5,37 @@ _cloak_cmd_0 () {
 }
 
 _cloak () {
-    local -a literals=("--key" "--help" "-i" "--gitignore-ignore" "-k" "encrypt" "decrypt" "ls" "ini" "hash" "generate" "--type" "-G" "--output" "-o" "-v" "--version" "-h" "--input")
+    local -a literals=("-i" "encrypt" "decrypt" "ini" "ls" "hash" "generate" "--type" "-o" "--output" "autocomplete" "--help" "-v" "--version" "--gitignore-ignore" "--key" "--input")
 
     local -A descriptions
-    descriptions[3]="Specify the input path"
-    descriptions[5]="Specify the encryption key path"
-    descriptions[6]="Encrypt a file"
-    descriptions[7]="Decrypt a file"
-    descriptions[8]="Lists the files considered in the encryption process"
-    descriptions[10]="Prints the hash of a file"
-    descriptions[11]="Generates various files"
-    descriptions[12]="Specify the type"
-    descriptions[13]="Do not include the gitignore patterns alongside cloakignore"
-    descriptions[15]="Specify the output path"
-    descriptions[16]="Prints the project version"
-    descriptions[18]="Prints the help message"
+    descriptions[1]="Specify the input path"
+    descriptions[2]="Encrypt a file"
+    descriptions[3]="Decrypt a file"
+    descriptions[5]="Lists the files considered in the encryption process"
+    descriptions[6]="Prints the hash of a file"
+    descriptions[7]="Generates various files"
+    descriptions[8]="Specify the type"
+    descriptions[9]="Specify the output path"
+    descriptions[12]="Prints the help message"
+    descriptions[13]="Prints the project version"
+    descriptions[15]="Do not include the gitignore patterns alongside cloakignore"
+    descriptions[16]="Specify the encryption key path"
 
     local -A literal_transitions
-    literal_transitions[1]="([2]=2 [16]=2 [18]=2 [6]=3 [7]=4 [8]=5 [11]=6 [10]=7 [17]=2)"
-    literal_transitions[3]="([3]=14 [19]=14)"
-    literal_transitions[4]="([3]=15 [19]=15)"
-    literal_transitions[5]="([13]=2 [3]=13 [4]=2 [19]=13)"
-    literal_transitions[6]="([12]=17)"
-    literal_transitions[7]="([3]=9 [19]=9)"
-    literal_transitions[8]="([1]=9 [5]=9)"
-    literal_transitions[10]="([1]=9 [14]=11 [5]=9 [15]=11)"
-    literal_transitions[12]="([14]=13 [13]=2 [4]=2 [15]=13)"
-    literal_transitions[16]="([4]=2 [13]=2)"
-    literal_transitions[17]="([9]=2)"
+    literal_transitions[1]="([13]=2 [2]=3 [3]=4 [5]=5 [12]=2 [7]=6 [6]=7 [14]=2)"
+    literal_transitions[3]="([1]=16 [17]=16)"
+    literal_transitions[4]="([1]=14 [17]=14)"
+    literal_transitions[5]="([1]=13 [15]=2 [17]=13)"
+    literal_transitions[6]="([8]=11)"
+    literal_transitions[7]="([1]=10 [17]=10)"
+    literal_transitions[9]="([16]=10)"
+    literal_transitions[11]="([4]=2 [11]=2)"
+    literal_transitions[12]="([10]=13 [15]=2 [9]=13)"
+    literal_transitions[15]="([10]=8 [9]=8 [16]=10)"
+    literal_transitions[17]="([15]=2)"
 
     local -A match_anything_transitions
-    match_anything_transitions=([11]=8 [9]=2 [15]=10 [14]=12 [13]=16)
+    match_anything_transitions=([10]=2 [16]=12 [14]=15 [13]=17 [8]=9)
 
     declare -A subword_transitions
 
@@ -71,13 +71,13 @@ _cloak () {
 
         return 1
     done
-    declare -A literal_transitions_level_0=([3]="3" [1]="16 18 6 7 8 11 10" [12]="13 15" [7]="3" [16]="13" [6]="12" [10]="5 15" [4]="3" [8]="5" [17]="9" [5]="13 3")
-    declare -A literal_transitions_level_1=([3]="19" [1]="2 17" [12]="14 4" [7]="19" [16]="4" [8]="1" [10]="1 14" [4]="19" [5]="4 19")
+    declare -A literal_transitions_level_0=([3]="1" [1]="13 2 3 5 12 7 6" [12]="15 9" [11]="4 11" [7]="1" [6]="8" [17]="15" [4]="1" [5]="1 15" [15]="9 16" [9]="16")
+    declare -A literal_transitions_level_1=([15]="10" [5]="17" [4]="17" [3]="17" [1]="14" [12]="10" [7]="17")
     declare -A subword_transitions_level_0=()
     declare -A subword_transitions_level_1=()
     declare -A commands_level_0=()
     declare -A commands_level_1=()
-    declare -A specialized_commands_level_0=([11]="0" [15]="0" [14]="0" [13]="0" [9]="0")
+    declare -A specialized_commands_level_0=([16]="0" [10]="0" [14]="0" [13]="0" [8]="0")
     declare -A specialized_commands_level_1=()
 
      local max_fallback_level=1
