@@ -1,6 +1,7 @@
 #define CLOAK_REMOVE_PREFIXES
 
 #include "cli.h"
+#include "config.h"
 #include "commands.h"
 #include "context.h"
 #include "files.h"
@@ -25,6 +26,9 @@
 
 
 int main(int argc, char** argv){
+    ConfigDirCreate();
+
+
     cli_args_t args = cli_args_make(
         cli_arg_new(FLAG_HELP,      "help",    "", no_argument),
         cli_arg_new(FLAG_VERSION,   "version", "", no_argument),
@@ -37,7 +41,7 @@ int main(int argc, char** argv){
 
     Command command = GetCommand(argv[1]);
     Context ctx = {.command = command};
-    CLOAK_ContextInit(&ctx, argc, argv);
+    ContextInit(&ctx, argc, argv);
 
     int opt;
     LOOP_ARGS(opt, args){

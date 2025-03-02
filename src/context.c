@@ -1,5 +1,6 @@
 #include "context.h"
 #include "cli.h"
+#include "config.h"
 #include "extern/logging.h"
 #include "files.h"
 #include <stdlib.h>
@@ -7,6 +8,7 @@
 
 void CLOAK_ContextInit(CLOAK_Context* ctx, int argc, char** argv)
 {
+    // Default values
     ctx->input = NULL;
     ctx->output = NULL;
     ctx->key = NULL;
@@ -14,13 +16,27 @@ void CLOAK_ContextInit(CLOAK_Context* ctx, int argc, char** argv)
     ctx->argc = argc;
     ctx->argv = argv;
     ctx->include_gitignore = true;
+    
+    // Load ini config
+    CLOAK_ConfigLoad(&ctx->config, CLOAK_CONFIG_FILE);
+    CLOAK_ContextLoadConfig(ctx, &ctx->config);
 }
+
+void CLOAK_ContextLoadConfig(CLOAK_Context* ctx, const CLOAK_Config* config)
+{
+    if(!config->initialized) return;
+
+    char* include_gitignore = CLOAK_ConfigGet(config, CLOAK_CONFIG_INCLUDE_GITIGNORE);
+    ctx->include_gitignore = BOOL(include_gitignore);
+}
+
 
 void CLOAK_ContextFree(CLOAK_Context* ctx)
 {
     free(ctx->input);
     free(ctx->output);
     free(ctx->key);
+    CLOAK_ConfigFree(&ctx->config);
 }
 
 static bool validateCommandEncrypt(CLOAK_Context* ctx)

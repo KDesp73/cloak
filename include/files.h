@@ -67,6 +67,15 @@ static inline int dir_create(const char* path)
     return 1;
 }
 
+static inline bool file_exists(const char *filename)
+{
+    FILE *file = fopen(filename, "r");
+    if (file) {
+        fclose(file);
+        return true;
+    }
+    return false;
+}
 
 #ifdef CLOAK_REMOVE_PREFIXES
 #endif // CLOAK_REMOVE_PREFIXES

@@ -29,6 +29,7 @@ Anything inside the `.gitignore` file is also included in this list
 - `.git*`
 - `.cloakignore`
 - `*.cloak`
+- `cloak.ini`
 
 ## License
 
