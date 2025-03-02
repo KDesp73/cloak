@@ -54,6 +54,7 @@ static void help()
     printf("\n");
 
     PB("COMMANDS");
+    PI("init                       Initialize cloak in your project");
     PI("encrypt                    Encrypt a file");
     PI("decrypt                    Decrypt a file");
     PI("hash                       Prints the hash of a file");

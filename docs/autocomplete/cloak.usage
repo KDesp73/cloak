@@ -1,6 +1,7 @@
 cloak <COMMANDS> | <HELP> || <VERSION>;
 
-<COMMANDS> ::= (encrypt <INPUT> [<OUTPUT>] [<GI-IGNORE>] | [<CI-IGNORE>]) "Encrypt a file"
+<COMMANDS> ::= (init) "Initialize cloak in your project"
+             | (encrypt <INPUT> [<OUTPUT>] [<GI-IGNORE>] | [<CI-IGNORE>]) "Encrypt a file"
 			 | (decrypt <INPUT> [<OUTPUT>] [<KEY>]) "Decrypt a file" 
 			 | (hash <INPUT>) "Prints the hash of a file" 
              | (ls [<INPUT>] [<GI-IGNORE>] [<CI-IGNORE>]) "Lists the files considered in the encryption process"
