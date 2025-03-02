@@ -3,7 +3,6 @@
 #include "config.h"
 #include "extern/logging.h"
 #include "files.h"
-#include <openssl/err.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -31,11 +30,11 @@ void CLOAK_ContextLoadConfig(CLOAK_Context* ctx, const CLOAK_Config* config)
 
     char* include_gitignore = CLOAK_ConfigGet(config, CLOAK_CONFIG_INCLUDE_GITIGNORE);
     if(include_gitignore)
-        ctx->include_gitignore = BOOL(include_gitignore);
+        ctx->include_gitignore = CLOAK_CONFIG_BOOL(include_gitignore);
 
     char* include_cloakignore = CLOAK_ConfigGet(config, CLOAK_CONFIG_INCLUDE_CLOAKIGNORE);
     if(include_cloakignore)
-        ctx->include_cloakignore = BOOL(include_cloakignore);
+        ctx->include_cloakignore = CLOAK_CONFIG_BOOL(include_cloakignore);
 }
 
 

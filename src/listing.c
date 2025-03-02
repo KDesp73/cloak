@@ -160,16 +160,15 @@ size_t CLOAK_ListLoadEncrypted(CLOAK_List* list, const char* path)
     size_t loaded_count = 0;
 
     while ((entry = readdir(dir))) {
-        // Skip . and ..
         if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
             continue;
         }
 
+        snprintf(full_path, sizeof(full_path), "%s/%s", path, entry->d_name);
+
         if (entry->d_type == DT_REG) {
             const char* ext = strrchr(entry->d_name, '.');
             if (ext && strcmp(ext, ".cloak") == 0) {
-                snprintf(full_path, sizeof(full_path), "%s/%s", path, entry->d_name);
-                
                 char** new_files = realloc(list->files, (list->count + 1) * sizeof(char*));
                 if (!new_files) {
                     closedir(dir);
@@ -180,7 +179,8 @@ size_t CLOAK_ListLoadEncrypted(CLOAK_List* list, const char* path)
                 list->files[list->count++] = strdup(full_path);
                 loaded_count++;
             }
-        } else if (entry->d_type == DT_DIR) {
+        }
+        else if (entry->d_type == DT_DIR) {
             loaded_count += CLOAK_ListLoadEncrypted(list, full_path);
         }
     }

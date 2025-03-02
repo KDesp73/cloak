@@ -35,7 +35,7 @@ void CLOAK_ConfigFree(CLOAK_Config* config);
 char* CLOAK_ConfigGet(const CLOAK_Config* config, const char* section, const char* key);
 void CLOAK_ConfigPrint(const CLOAK_Config* config);
 
-#define BOOL(x) (strcmp(x, "true") == 0 || strcmp(x, "TRUE") == 0 || strcmp(x, "yes") == 0 || strcmp(x, "YES") == 0 || strcmp(x, "1") == 0)
+#define CLOAK_CONFIG_BOOL(x) (strcmp(x, "true") == 0 || strcmp(x, "TRUE") == 0 || strcmp(x, "yes") == 0 || strcmp(x, "YES") == 0 || strcmp(x, "1") == 0)
 
 #define CLOAK_CONFIG_INCLUDE_GITIGNORE "behaviour", "include_gitignore"
 #define CLOAK_CONFIG_INCLUDE_CLOAKIGNORE "behaviour", "include_cloakignore"
