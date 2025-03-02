@@ -54,21 +54,22 @@ static void help()
     printf("\n");
 
     PB("COMMANDS");
-    PI("encrypt                Encrypt a file");
-    PI("decrypt                Decrypt a file");
-    PI("hash                   Prints the hash of a file");
-    PI("ls                     Lists the files considered in the encryption process");
-    PI("generate               Generates various files");
+    PI("encrypt                    Encrypt a file");
+    PI("decrypt                    Decrypt a file");
+    PI("hash                       Prints the hash of a file");
+    PI("ls                         Lists the files considered in the encryption process");
+    PI("generate                   Generates various files");
     printf("\n");
 
     PB("OPTIONS");
-    PI("-h --help              Prints this message");
-    PI("-v --version           Prints the current version");
-    PI("-k --key <PATH>        Specify the encryption key path");
-    PI("-i --input <PATH>      Specify the input path");
-    PI("-o --output <PATH>     Specify the output path");
-    PI("-G --gitignore-ignore  Do not include the gitignore patterns alongside cloakignore");
-    PI("-t --type              Specify the type");
+    PI("-h --help                  Prints this message");
+    PI("-v --version               Prints the current version");
+    PI("-k --key <PATH>            Specify the encryption key path");
+    PI("-i --input <PATH>          Specify the input path");
+    PI("-o --output <PATH>         Specify the output path");
+    PI("-G --gitignore-ignore      Do not include the gitignore patterns");
+    PI("-C --cloakignore-ignore    Do not include the cloakignore patterns");
+    PI("-t --type                  Specify the type");
 }
 
 static void encryptHelp()
@@ -78,10 +79,11 @@ static void encryptHelp()
     printf("\n");
 
     PB("OPTIONS");
-    PI("-h --help              Prints this message");
-    PI("-i --input <PATH>      Specify the input path");
-    PI("-o --output <PATH>     Specify the output path");
-    PI("-G --gitignore-ignore  Do not include the gitignore patterns alongside cloakignore");
+    PI("-h --help                  Prints this message");
+    PI("-i --input <PATH>          Specify the input path");
+    PI("-o --output <PATH>         Specify the output path");
+    PI("-G --gitignore-ignore      Do not include the gitignore patterns");
+    PI("-C --cloakignore-ignore    Do not include the cloakignore patterns");
     printf("\n");
 
     PB("NOTES");
@@ -102,10 +104,10 @@ static void decryptHelp()
     printf("\n");
 
     PB("OPTIONS");
-    PI("-h --help              Prints this message");
-    PI("-i --input <PATH>      Specify the input path");
-    PI("-o --output <PATH>     Specify the output path");
-    PI("-k --key <PATH>        Specify the encryption key path");
+    PI("-h --help                  Prints this message");
+    PI("-i --input <PATH>          Specify the input path");
+    PI("-o --output <PATH>         Specify the output path");
+    PI("-k --key <PATH>            Specify the encryption key path");
 }
 
 static void hashHelp()
@@ -115,8 +117,8 @@ static void hashHelp()
     printf("\n");
 
     PB("OPTIONS");
-    PI("-h --help              Prints this message");
-    PI("-i --input <PATH>      Specify the input path");
+    PI("-h --help                  Prints this message");
+    PI("-i --input <PATH>          Specify the input path");
 }
 
 static void lsHelp()
@@ -126,9 +128,10 @@ static void lsHelp()
     printf("\n");
 
     PB("OPTIONS");
-    PI("-h --help              Prints this message");
-    PI("-i --input <PATH>      Specify the input path");
-    PI("-G --gitignore-ignore  Do not include the gitignore patterns alongside cloakignore");
+    PI("-h --help                  Prints this message");
+    PI("-i --input <PATH>          Specify the input path");
+    PI("-G --gitignore-ignore      Do not include the gitignore patterns");
+    PI("-C --cloakignore-ignore    Do not include the cloakignore patterns");
 }
 
 static void generateHelp()
@@ -138,11 +141,11 @@ static void generateHelp()
     printf("\n");
 
     PB("OPTIONS");
-    PI("-h --help              Prints this message");
-    PI("-t --type              Specify the type");
+    PI("-h --help                  Prints this message");
+    PI("-t --type                  Specify the type");
     printf("\n");
 
     PB("TYPES");
-    PI("ini                    `cloak.ini` config file");
-    PI("autocomplete           Autocompletion scripts for bash, zsh and fish");
+    PI("ini                        `cloak.ini` config file");
+    PI("autocomplete               Autocompletion scripts for bash, zsh and fish");
 }

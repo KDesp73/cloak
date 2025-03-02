@@ -50,12 +50,13 @@ static size_t loadPatternsFromFile(char*** patterns, const char* path, size_t co
     return count;
 }
 
-size_t CLOAK_LoadIgnore(char*** patterns, bool include_gitignore)
+size_t CLOAK_LoadIgnore(char*** patterns, bool include_gitignore, bool include_cloakignore)
 {
     char** list = NULL;
     size_t count = 0;
 
-    count = loadPatternsFromFile(&list, CLOAK_IGNORE_FILE, count);
+    if(include_cloakignore)
+        count = loadPatternsFromFile(&list, CLOAK_IGNORE_FILE, count);
     if(include_gitignore)
         count = loadPatternsFromFile(&list, ".gitignore", count);
 
@@ -88,7 +89,7 @@ int CLOAK_IsIgnored(const char* filename, char** patterns, size_t pattern_count)
 }
 
 
-size_t CLOAK_ListLoad(CLOAK_List* list, const char* path, bool include_gitignore)
+size_t CLOAK_ListLoad(CLOAK_List* list, const char* path, bool include_gitignore, bool include_cloakignore)
 {
     DIR* dir = opendir(path);
     if (!dir) {
@@ -102,7 +103,7 @@ size_t CLOAK_ListLoad(CLOAK_List* list, const char* path, bool include_gitignore
 
     // Load ignore patterns
     char** ignore_patterns = NULL;
-    size_t ignore_count = CLOAK_LoadIgnore(&ignore_patterns, include_gitignore);
+    size_t ignore_count = CLOAK_LoadIgnore(&ignore_patterns, include_gitignore, include_cloakignore);
 
     while ((entry = readdir(dir))) {
         if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
@@ -120,7 +121,7 @@ size_t CLOAK_ListLoad(CLOAK_List* list, const char* path, bool include_gitignore
         struct stat entry_stat;
         if (stat(full_path, &entry_stat) == 0 && S_ISDIR(entry_stat.st_mode)) {
             // Recursively load files from the child directory
-            loaded_count += CLOAK_ListLoad(list, full_path, include_gitignore);
+            loaded_count += CLOAK_ListLoad(list, full_path, include_gitignore, include_cloakignore);
         } else {
             // Add the file to the list
             char** new_files = realloc(list->files, (list->count + 1) * sizeof(char*));

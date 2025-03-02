@@ -11,8 +11,8 @@ typedef struct {
 
 #define CLOAK_IGNORE_FILE ".cloakignore"
 
-size_t CLOAK_ListLoad(CLOAK_List* list, const char* path, bool include_gitignore);
-size_t CLOAK_LoadIgnore(char*** patterns, bool include_gitignore);
+size_t CLOAK_ListLoad(CLOAK_List* list, const char* path, bool include_gitignore, bool include_cloakignore);
+size_t CLOAK_LoadIgnore(char*** patterns, bool include_gitignore, bool include_cloakignore);
 int CLOAK_IsIgnored(const char* filename, char** patterns, size_t pattern_count);
 size_t CLOAK_ListLoadEncrypted(CLOAK_List* list, const char* path);
 

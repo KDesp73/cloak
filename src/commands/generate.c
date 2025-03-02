@@ -12,8 +12,9 @@ const char* ini =
 "rsa_private = .cloak/private.pem\n"
 "rsa_public = .cloak/public.pem\n"
 "\n"
-"[ignore]\n"
-"include_gitignore = true\n";
+"[behaviour]\n"
+"include_gitignore = true\n"
+"include_cloakignore = true\n";
 
 #include <stdio.h>
 #include <stdlib.h>

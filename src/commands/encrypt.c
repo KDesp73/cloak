@@ -54,7 +54,7 @@ int CLOAK_CommandEncrypt(CLOAK_Context* ctx)
 
     if (ctx->is_dir) {
         CLOAK_List list = {0};
-        CLOAK_ListLoad(&list, ctx->input, ctx->include_gitignore);
+        CLOAK_ListLoad(&list, ctx->input, ctx->include_gitignore, ctx->include_cloakignore);
 
         for (size_t i = 0; i < list.count; i++) {
             if(!encryptFile(list.files[i], NULL, key))

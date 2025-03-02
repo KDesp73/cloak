@@ -40,7 +40,8 @@ void CLOAK_ConfigPrint(const CLOAK_Config* config);
 
 #define BOOL(x) (strcmp(x, "true") == 0 || strcmp(x, "TRUE") == 0 || strcmp(x, "yes") == 0 || strcmp(x, "YES") == 0 || strcmp(x, "1") == 0)
 
-#define CLOAK_CONFIG_INCLUDE_GITIGNORE "ignore", "include_gitignore"
+#define CLOAK_CONFIG_INCLUDE_GITIGNORE "behaviour", "include_gitignore"
+#define CLOAK_CONFIG_INCLUDE_CLOAKIGNORE "behaviour", "include_cloakignore"
 #define CLOAK_CONFIG_BACKUP "paths", "backup"
 #define CLOAK_CONFIG_DECRYPTED "paths", "decrypted"
 #define CLOAK_CONFIG_RSA_PRIVATE "paths", "rsa_private"

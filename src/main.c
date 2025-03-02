@@ -28,7 +28,6 @@
 int main(int argc, char** argv){
     ConfigDirCreate();
 
-
     cli_args_t args = cli_args_make(
         cli_arg_new(FLAG_HELP,      "help",    "", no_argument),
         cli_arg_new(FLAG_VERSION,   "version", "", no_argument),
@@ -37,6 +36,7 @@ int main(int argc, char** argv){
         cli_arg_new(FLAG_OUTPUT,    "output",  "", required_argument),
         cli_arg_new(FLAG_TYPE,      "type",    "", required_argument),
         cli_arg_new(FLAG_GITIGNORE_IGNORE, "gitignore-ignore", "", no_argument),
+        cli_arg_new(FLAG_CLOAKIGNORE_IGNORE, "cloakignore-ignore", "", no_argument),
         NULL
     );
 
@@ -66,6 +66,9 @@ int main(int argc, char** argv){
                 break;
             case FLAG_GITIGNORE_IGNORE:
                 ctx.include_gitignore = false;
+                break;
+            case FLAG_CLOAKIGNORE_IGNORE:
+                ctx.include_cloakignore = false;
                 break;
             case FLAG_TYPE:
                 ctx.type = strdup(optarg);

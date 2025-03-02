@@ -1,9 +1,9 @@
 cloak <COMMANDS> | <HELP> || <VERSION>;
 
-<COMMANDS> ::= (encrypt <INPUT> [<OUTPUT>] [<GI-IGNORE>]) "Encrypt a file"
+<COMMANDS> ::= (encrypt <INPUT> [<OUTPUT>] [<GI-IGNORE>] | [<CI-IGNORE>]) "Encrypt a file"
 			 | (decrypt <INPUT> [<OUTPUT>] [<KEY>]) "Decrypt a file" 
 			 | (hash <INPUT>) "Prints the hash of a file" 
-             | (ls [<INPUT>] [<GI-IGNORE>]) "Lists the files considered in the encryption process"
+             | (ls [<INPUT>] [<GI-IGNORE>] [<CI-IGNORE>]) "Lists the files considered in the encryption process"
              | (generate <TYPE>) "Generates various files"
 			 ;
 
@@ -13,7 +13,8 @@ cloak <COMMANDS> | <HELP> || <VERSION>;
 <INPUT>     ::= (-i <PATH> || --input <PATH>) "Specify the input path";
 <OUTPUT>    ::= (-o <PATH> || --output <PATH>) "Specify the output path";
 <KEY>       ::= (--key <PATH>) "Specify the encryption key path";
-<GI-IGNORE> ::= (--gitignore-ignore) "Do not include the gitignore patterns alongside cloakignore";
+<GI-IGNORE> ::= (--gitignore-ignore) "Do not include the gitignore patterns";
+<CI-IGNORE> ::= (--cloakignore-ignore) "Do not include the cloakignore patterns";
 
 <TYPES> ::= (ini | autocomplete);
 <TYPE> ::= (--type <TYPES>) "Specify the type";

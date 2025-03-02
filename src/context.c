@@ -18,6 +18,7 @@ void CLOAK_ContextInit(CLOAK_Context* ctx, int argc, char** argv)
     ctx->argc = argc;
     ctx->argv = argv;
     ctx->include_gitignore = true;
+    ctx->include_cloakignore = true;
     
     // Load ini config
     CLOAK_ConfigLoad(&ctx->config, CLOAK_CONFIG_FILE);
@@ -31,6 +32,10 @@ void CLOAK_ContextLoadConfig(CLOAK_Context* ctx, const CLOAK_Config* config)
     char* include_gitignore = CLOAK_ConfigGet(config, CLOAK_CONFIG_INCLUDE_GITIGNORE);
     if(include_gitignore)
         ctx->include_gitignore = BOOL(include_gitignore);
+
+    char* include_cloakignore = CLOAK_ConfigGet(config, CLOAK_CONFIG_INCLUDE_CLOAKIGNORE);
+    if(include_cloakignore)
+        ctx->include_cloakignore = BOOL(include_cloakignore);
 }
 
 
