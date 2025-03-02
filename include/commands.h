@@ -13,6 +13,7 @@ int CLOAK_CommandEncrypt(CLOAK_Context* ctx);
 int CLOAK_CommandDecrypt(CLOAK_Context* ctx);
 int CLOAK_CommandHash(CLOAK_Context* ctx);
 int CLOAK_CommandLs(CLOAK_Context* ctx);
+int CLOAK_CommandGenerate(CLOAK_Context* ctx);
 
 static inline CLOAK_CommandFunc CLOAK_GetCommandFunc(CLOAK_Command command)
 {
@@ -25,6 +26,8 @@ static inline CLOAK_CommandFunc CLOAK_GetCommandFunc(CLOAK_Command command)
         return CLOAK_CommandHash;
     case CLOAK_COMMAND_LS:
         return CLOAK_CommandLs;
+    case CLOAK_COMMAND_GENERATE:
+        return CLOAK_CommandGenerate;
     case CLOAK_COMMAND_NONE:
     default:
         return NULL;
@@ -37,6 +40,7 @@ static inline CLOAK_CommandFunc CLOAK_GetCommandFunc(CLOAK_Command command)
 #define CommandEncrypt CLOAK_CommandEncrypt
 #define CommandDecrypt CLOAK_CommandDecrypt
 #define CommandHash CLOAK_CommandHash
+#define CommandGenerate CLOAK_CommandGenerate
 
 #define GetCommandFunc CLOAK_GetCommandFunc
 #endif // CLOAK_REMOVE_PREFIXES

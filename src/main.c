@@ -35,6 +35,7 @@ int main(int argc, char** argv){
         cli_arg_new(FLAG_KEY,       "key",     "", required_argument),
         cli_arg_new(FLAG_INPUT,     "input",   "", required_argument),
         cli_arg_new(FLAG_OUTPUT,    "output",  "", required_argument),
+        cli_arg_new(FLAG_TYPE,      "type",    "", required_argument),
         cli_arg_new(FLAG_GITIGNORE_IGNORE, "gitignore-ignore", "", no_argument),
         NULL
     );
@@ -65,6 +66,9 @@ int main(int argc, char** argv){
                 break;
             case FLAG_GITIGNORE_IGNORE:
                 ctx.include_gitignore = false;
+                break;
+            case FLAG_TYPE:
+                ctx.type = strdup(optarg);
                 break;
             default:
                 CLEANUP(1);

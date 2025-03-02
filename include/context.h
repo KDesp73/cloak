@@ -14,6 +14,7 @@ typedef struct {
     bool is_dir;
     char* key;
     bool include_gitignore;
+    char* type;
     CLOAK_Config config;
 } CLOAK_Context;
 

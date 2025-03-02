@@ -11,18 +11,20 @@ _cloak () {
     local words cword
     _get_comp_words_by_ref -n "$COMP_WORDBREAKS" words cword
 
-    declare -a literals=(--key --help -i --gitignore-ignore -k encrypt decrypt ls hash -G --output -o -v --version -h --input)
+    declare -a literals=(--key --help -i --gitignore-ignore -k encrypt decrypt ls ini hash generate --type -G --output -o -v --version -h --input)
     declare -A literal_transitions=()
-    literal_transitions[0]="([1]=1 [12]=1 [14]=1 [5]=2 [6]=3 [7]=4 [8]=5 [13]=1)"
-    literal_transitions[2]="([2]=12 [15]=12)"
-    literal_transitions[3]="([2]=14 [15]=14)"
-    literal_transitions[4]="([9]=1 [2]=6 [3]=1 [15]=6)"
-    literal_transitions[5]="([2]=9 [15]=9)"
-    literal_transitions[7]="([3]=1 [9]=1)"
-    literal_transitions[8]="([0]=9 [10]=10 [4]=9 [11]=10)"
-    literal_transitions[11]="([10]=6 [9]=1 [3]=1 [11]=6)"
-    literal_transitions[13]="([0]=9 [4]=9)"
-    declare -A match_anything_transitions=([9]=1 [10]=13 [6]=7 [12]=11 [14]=8)
+    literal_transitions[0]="([1]=1 [15]=1 [17]=1 [5]=2 [6]=3 [7]=4 [10]=5 [9]=6 [16]=1)"
+    literal_transitions[2]="([2]=13 [18]=13)"
+    literal_transitions[3]="([2]=14 [18]=14)"
+    literal_transitions[4]="([12]=1 [2]=12 [3]=1 [18]=12)"
+    literal_transitions[5]="([11]=16)"
+    literal_transitions[6]="([2]=8 [18]=8)"
+    literal_transitions[7]="([0]=8 [4]=8)"
+    literal_transitions[9]="([0]=8 [13]=10 [4]=8 [14]=10)"
+    literal_transitions[11]="([13]=12 [12]=1 [3]=1 [14]=12)"
+    literal_transitions[15]="([3]=1 [12]=1)"
+    literal_transitions[16]="([8]=1)"
+    declare -A match_anything_transitions=([10]=7 [8]=1 [14]=9 [13]=11 [12]=15)
     declare -A subword_transitions
 
     local state=0
@@ -59,13 +61,13 @@ _cloak () {
         return 1
     done
 
-    declare -A literal_transitions_level_0=([13]="4" [2]="2" [7]="9" [0]="12 14 5 6 7 8" [11]="9 11" [5]="2" [4]="9 2" [3]="2" [8]="4 11")
-    declare -A literal_transitions_level_1=([13]="0" [2]="15" [7]="3" [0]="1 13" [11]="10 3" [5]="15" [4]="3 15" [3]="15" [8]="0 10")
+    declare -A literal_transitions_level_0=([2]="2" [0]="15 17 5 6 7 10 9" [11]="12 14" [6]="2" [15]="12" [5]="11" [9]="4 14" [3]="2" [7]="4" [16]="8" [4]="12 2")
+    declare -A literal_transitions_level_1=([2]="18" [0]="1 16" [11]="13 3" [6]="18" [15]="3" [7]="0" [9]="0 13" [3]="18" [4]="3 18")
     declare -A subword_transitions_level_0=()
     declare -A subword_transitions_level_1=()
     declare -A commands_level_0=()
     declare -A commands_level_1=()
-    declare -A specialized_commands_level_0=([10]="0" [9]="0" [14]="0" [12]="0" [6]="0")
+    declare -A specialized_commands_level_0=([10]="0" [14]="0" [13]="0" [12]="0" [8]="0")
     declare -A specialized_commands_level_1=()
 
     local -a matches=()

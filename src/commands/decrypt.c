@@ -4,7 +4,6 @@
 #include "context.h"
 #include "extern/logging.h"
 #include "files.h"
-#include "hashing.h"
 #include "listing.h"
 
 #include <stdio.h>
@@ -13,74 +12,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-static int encryptFile(const char* in, const char* out, unsigned char key[CLOAK_KEY_SIZE])
-{
-    char* output = NULL;
-    if (out) {
-        output = strdup(out);
-        if (!output) {
-            ERRO("Failed to allocate memory for output filename.");
-            return false;
-        }
-    } else {
-        if (asprintf(&output, "%s.cloak", in) == -1) {
-            ERRO("Failed to create output filename.");
-            return false;
-        }
-    }
-
-    char* zip = NULL;
-    asprintf(&zip, "%s.bin", in);
-    CLOAK_Compress(in, zip);
-
-    if (CLOAK_AESEncryptFile(zip, output, key) != 0) {
-        ERRO("Encryption of file %s failed.", in);
-        file_delete(zip);
-        free(zip);
-        free(output);
-        return false;
-    }
-    file_delete(zip);
-    free(zip);
-    free(output);
-    return true;
-}
-
-int CLOAK_CommandEncrypt(CLOAK_Context* ctx)
-{
-    unsigned char key[CLOAK_KEY_SIZE];
-    CLOAK_AESGenerateKey(key);
-
-    // TODO: backup file or directory
-
-    if (ctx->is_dir) {
-        CLOAK_List list = {0};
-        CLOAK_ListLoad(&list, ctx->input, ctx->include_gitignore);
-
-        for (size_t i = 0; i < list.count; i++) {
-            if(!encryptFile(list.files[i], NULL, key))
-                ERRO("Could not encrypt '%s'", list.files[i]);
-        }
-
-        CLOAK_ListFree(&list);
-    } else {
-        if(!encryptFile(ctx->input, ctx->output, key))
-            return false;
-    }
-
-    
-    // TODO: Sign key using RSA
-    FILE* key_file = fopen(CLOAK_KEY_FILE, "wb");
-    if (!key_file) {
-        ERRO("Failed to open key file for writing.");
-        return false;
-    }
-
-    fwrite(key, 1, CLOAK_KEY_SIZE, key_file);
-    fclose(key_file);
-
-    return true;
-}
 
 static void removeSubstring(char* str, const char* sub) {
     char* pos;
@@ -220,23 +151,3 @@ int CLOAK_CommandDecrypt(CLOAK_Context* ctx)
     return true;
 }
 
-int CLOAK_CommandHash(CLOAK_Context* ctx)
-{
-    unsigned char hash[CLOAK_HASH_SIZE];
-    CLOAK_HashFile(ctx->input, hash);
-    CLOAK_HashPrint(hash);
-
-    return true;
-}
-
-int CLOAK_CommandLs(CLOAK_Context* ctx)
-{
-    const char* path = (ctx->input) ? ctx->input : ".";
-
-    CLOAK_List list = {0};
-    CLOAK_ListLoad(&list, path, ctx->include_gitignore);
-    CLOAK_ListPrint(&list);
-    CLOAK_ListFree(&list);
-
-    return true;
-}

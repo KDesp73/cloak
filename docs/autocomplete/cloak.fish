@@ -14,7 +14,7 @@ function _cloak
         set COMP_CWORD (count $COMP_WORDS)
     end
 
-    set literals "--key" "--help" "-i" "--gitignore-ignore" "-k" "encrypt" "decrypt" "ls" "hash" "-G" "--output" "-o" "-v" "--version" "-h" "--input"
+    set literals "--key" "--help" "-i" "--gitignore-ignore" "-k" "encrypt" "decrypt" "ls" "ini" "hash" "generate" "--type" "-G" "--output" "-o" "-v" "--version" "-h" "--input"
 
     set descriptions
     set descriptions[3] "Specify the input path"
@@ -22,25 +22,29 @@ function _cloak
     set descriptions[6] "Encrypt a file"
     set descriptions[7] "Decrypt a file"
     set descriptions[8] "Lists the files considered in the encryption process"
-    set descriptions[9] "Prints the hash of a file"
-    set descriptions[10] "Do not include the gitignore patterns alongside cloakignore"
-    set descriptions[12] "Specify the output path"
-    set descriptions[13] "Prints the project version"
-    set descriptions[15] "Prints the help message"
+    set descriptions[10] "Prints the hash of a file"
+    set descriptions[11] "Generates various files"
+    set descriptions[12] "Specify the type"
+    set descriptions[13] "Do not include the gitignore patterns alongside cloakignore"
+    set descriptions[15] "Specify the output path"
+    set descriptions[16] "Prints the project version"
+    set descriptions[18] "Prints the help message"
 
     set literal_transitions
-    set literal_transitions[1] "set inputs 2 13 15 6 7 8 9 14; set tos 2 2 2 3 4 5 6 2"
-    set literal_transitions[3] "set inputs 3 16; set tos 13 13"
-    set literal_transitions[4] "set inputs 3 16; set tos 15 15"
-    set literal_transitions[5] "set inputs 10 3 4 16; set tos 2 7 2 7"
-    set literal_transitions[6] "set inputs 3 16; set tos 10 10"
-    set literal_transitions[8] "set inputs 4 10; set tos 2 2"
-    set literal_transitions[9] "set inputs 1 11 5 12; set tos 10 11 10 11"
-    set literal_transitions[12] "set inputs 11 10 4 12; set tos 7 2 2 7"
-    set literal_transitions[14] "set inputs 1 5; set tos 10 10"
+    set literal_transitions[1] "set inputs 2 16 18 6 7 8 11 10 17; set tos 2 2 2 3 4 5 6 7 2"
+    set literal_transitions[3] "set inputs 3 19; set tos 14 14"
+    set literal_transitions[4] "set inputs 3 19; set tos 15 15"
+    set literal_transitions[5] "set inputs 13 3 4 19; set tos 2 13 2 13"
+    set literal_transitions[6] "set inputs 12; set tos 17"
+    set literal_transitions[7] "set inputs 3 19; set tos 9 9"
+    set literal_transitions[8] "set inputs 1 5; set tos 9 9"
+    set literal_transitions[10] "set inputs 1 14 5 15; set tos 9 11 9 11"
+    set literal_transitions[12] "set inputs 14 13 4 15; set tos 13 2 2 13"
+    set literal_transitions[16] "set inputs 4 13; set tos 2 2"
+    set literal_transitions[17] "set inputs 9; set tos 2"
 
-    set match_anything_transitions_from 10 11 7 13 15
-    set match_anything_transitions_to 2 14 8 12 9
+    set match_anything_transitions_from 11 9 15 14 13
+    set match_anything_transitions_to 8 2 10 12 16
 
     set state 1
     set word_index 2
@@ -92,7 +96,7 @@ function _cloak
         end
     end
 
-    set specialized_command_states 7 10 15 13 11
+    set specialized_command_states 9 15 14 13 11
     set specialized_command_ids 5 5 5 5 5
     if contains $state $specialized_command_states
         set index (contains --index $state $specialized_command_states)

@@ -77,6 +77,20 @@ static inline bool file_exists(const char *filename)
     return false;
 }
 
+
+static inline bool file_write(const char* path, const char* content)
+{
+    FILE* __file = fopen(path, "w");
+    if(!__file) {
+        return false;
+    }
+    fprintf(__file, "%s", content);
+    fclose(__file);
+
+    return true;
+}
+
+
 #ifdef CLOAK_REMOVE_PREFIXES
 #endif // CLOAK_REMOVE_PREFIXES
 

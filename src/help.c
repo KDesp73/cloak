@@ -7,6 +7,8 @@ static void encryptHelp();
 static void decryptHelp();
 static void hashHelp();
 static void lsHelp();
+static void generateHelp();
+
 static void footer();
 
 void CLOAK_Help(CLOAK_Command command)
@@ -23,6 +25,9 @@ void CLOAK_Help(CLOAK_Command command)
             break;
         case CLOAK_COMMAND_LS:
             lsHelp();
+            break;
+        case CLOAK_COMMAND_GENERATE:
+            generateHelp();
             break;
 
         case CLOAK_COMMAND_NONE:
@@ -53,6 +58,7 @@ static void help()
     PI("decrypt                Decrypt a file");
     PI("hash                   Prints the hash of a file");
     PI("ls                     Lists the files considered in the encryption process");
+    PI("generate               Generates various files");
     printf("\n");
 
     PB("OPTIONS");
@@ -62,6 +68,7 @@ static void help()
     PI("-i --input <PATH>      Specify the input path");
     PI("-o --output <PATH>     Specify the output path");
     PI("-G --gitignore-ignore  Do not include the gitignore patterns alongside cloakignore");
+    PI("-t --type              Specify the type");
 }
 
 static void encryptHelp()
@@ -91,7 +98,7 @@ static void encryptHelp()
 static void decryptHelp()
 {
     PB("USAGE");
-    PI("cloak decrypt -i <PATH> -o <PATH> -k <KEY-PATH>"); 
+    PI("cloak decrypt -i <PATH> [-o <PATH>] [-k <KEY-PATH>]"); 
     printf("\n");
 
     PB("OPTIONS");
@@ -122,4 +129,19 @@ static void lsHelp()
     PI("-h --help              Prints this message");
     PI("-i --input <PATH>      Specify the input path");
     PI("-G --gitignore-ignore  Do not include the gitignore patterns alongside cloakignore");
+}
+
+static void generateHelp()
+{
+    PB("USAGE");
+    PI("cloak generate --type=<TYPE>");
+    printf("\n");
+
+    PB("OPTIONS");
+    PI("-h --help              Prints this message");
+    PI("-t --type              Specify the type");
+    printf("\n");
+
+    PB("TYPES");
+    PI("ini                    `cloak.ini` config file");
 }

@@ -12,6 +12,8 @@ char* CLOAK_CommandToString(CLOAK_Command c)
         return "hash";
     case CLOAK_COMMAND_LS:
         return "ls";
+    case CLOAK_COMMAND_GENERATE:
+        return "generate";
 
     case CLOAK_COMMAND_NONE:
     default:
@@ -30,6 +32,7 @@ CLOAK_Command CLOAK_GetCommand(const char* command)
     else COMPARE_AND_RETURN_COMMAND(CLOAK_COMMAND_DECRYPT);
     else COMPARE_AND_RETURN_COMMAND(CLOAK_COMMAND_HASH);
     else COMPARE_AND_RETURN_COMMAND(CLOAK_COMMAND_LS);
+    else COMPARE_AND_RETURN_COMMAND(CLOAK_COMMAND_GENERATE);
     
 #undef COMPARE_AND_RETURN_COMMAND
 

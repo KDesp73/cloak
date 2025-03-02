@@ -4,13 +4,17 @@ cloak <COMMANDS> | <HELP> || <VERSION>;
 			 | (decrypt <INPUT> [<OUTPUT>] [<KEY>]) "Decrypt a file" 
 			 | (hash <INPUT>) "Prints the hash of a file" 
              | (ls [<INPUT>] [<GI-IGNORE>]) "Lists the files considered in the encryption process"
+             | (generate <TYPE>) "Generates various files"
 			 ;
 
 
-<HELP>    ::= (-h || --help) "Prints the help message";
-<VERSION> ::= (-v || --version) "Prints the project version";
-<INPUT>   ::= (-i <PATH> || --input <PATH>) "Specify the input path";
-<OUTPUT>  ::= (-o <PATH> || --output <PATH>) "Specify the output path";
-<KEY>     ::= (-k <PATH> || --key <PATH>) "Specify the encryption key path";
+<HELP>      ::= (-h || --help) "Prints the help message";
+<VERSION>   ::= (-v || --version) "Prints the project version";
+<INPUT>     ::= (-i <PATH> || --input <PATH>) "Specify the input path";
+<OUTPUT>    ::= (-o <PATH> || --output <PATH>) "Specify the output path";
+<KEY>       ::= (-k <PATH> || --key <PATH>) "Specify the encryption key path";
 <GI-IGNORE> ::= (-G || --gitignore-ignore) "Do not include the gitignore patterns alongside cloakignore";
+
+<TYPES> ::= (ini);
+<TYPE>      ::= (--type <TYPES>) "Specify the type";
 
