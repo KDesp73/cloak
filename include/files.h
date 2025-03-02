@@ -90,6 +90,11 @@ static inline bool file_write(const char* path, const char* content)
     return true;
 }
 
+static inline bool dir_exists(const char *path)
+{
+    struct stat st;
+    return (stat(path, &st) == 0) && S_ISDIR(st.st_mode);
+}
 
 #ifdef CLOAK_REMOVE_PREFIXES
 #endif // CLOAK_REMOVE_PREFIXES

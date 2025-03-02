@@ -124,6 +124,11 @@ bool CLOAK_ContextValidate(CLOAK_Context* ctx)
         ERRO("Command is not specified");
         return false;
     }
+
+    if (ctx->command == CLOAK_COMMAND_UNKNOWN) {
+        ERRO("Unknown command '%s'", ctx->argv[1]);
+        return false;
+    }
     
     if (ctx->command == CLOAK_COMMAND_ENCRYPT) {
         if (!validateCommandEncrypt(ctx)) {

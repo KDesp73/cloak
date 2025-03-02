@@ -39,6 +39,6 @@ CLOAK_Command CLOAK_GetCommand(const char* command)
     
 #undef COMPARE_AND_RETURN_COMMAND
 
-    return CLOAK_COMMAND_NONE;
+    return CLOAK_COMMAND_UNKNOWN;
 }
 

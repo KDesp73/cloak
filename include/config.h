@@ -11,9 +11,6 @@
 #define CLOAK_CONFIG_DEFAULT_RSA_PRIVATE ".cloak/private.pem"
 #define CLOAK_CONFIG_DEFAULT_RSA_PUBLIC  ".cloak/public.pem"
 
-
-void CLOAK_ConfigDirCreate();
-
 #define CLOAK_CONFIG_ENTRY_NULL (CLOAK_ConfigEntry) {.section = NULL, .key = NULL, .value = NULL}
 typedef struct {
     char* section;
@@ -48,8 +45,6 @@ void CLOAK_ConfigPrint(const CLOAK_Config* config);
 #define CLOAK_CONFIG_RSA_PUBLIC "paths", "rsa_public"
 
 #ifdef CLOAK_REMOVE_PREFIXES
-
-#define ConfigDirCreate CLOAK_ConfigDirCreate
 
 #define ConfigEntry CLOAK_ConfigEntry
 #define ConfigEntryInit CLOAK_ConfigEntryInit

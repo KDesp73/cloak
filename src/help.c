@@ -55,8 +55,8 @@ static void help()
 
     PB("COMMANDS");
     PI("init                       Initialize cloak in your project");
-    PI("encrypt                    Encrypt a file");
-    PI("decrypt                    Decrypt a file");
+    PI("encrypt                    Encrypt a file or a directory");
+    PI("decrypt                    Decrypt a file or a directory");
     PI("hash                       Prints the hash of a file");
     PI("ls                         Lists the files considered in the encryption process");
     PI("generate                   Generates various files");

@@ -1,18 +1,10 @@
 #include "config.h"
-#include "files.h"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 
 #define INI_IMPLEMENTATION
 #include "extern/ini.h"
-
-void CLOAK_ConfigDirCreate()
-{
-    if(file_exists(CLOAK_CONFIG_DIRECTORY)) return;
-
-    dir_create(CLOAK_CONFIG_DIRECTORY);
-}
 
 static int handler(void* user, const char* section, const char* name, const char* value)
 {

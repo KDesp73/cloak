@@ -5,41 +5,41 @@ _cloak_cmd_0 () {
 }
 
 _cloak () {
-    local -a literals=("-i" "encrypt" "--gitignore-ignore" "init" "decrypt" "ls" "generate" "--cloakignore-ignore" "hash" "-o" "--output" "--type" "ini" "autocomplete" "--help" "-v" "--version" "--key" "--input")
+    local -a literals=("decrypt" "-i" "--gitignore-ignore" "init" "ls" "ini" "generate" "hash" "encrypt" "--cloakignore-ignore" "--output" "-o" "--type" "autocomplete" "--help" "-v" "--version" "--key" "--input")
 
     local -A descriptions
-    descriptions[1]="Specify the input path"
-    descriptions[2]="Encrypt a file"
+    descriptions[1]="Decrypt a file or a directory"
+    descriptions[2]="Specify the input path"
     descriptions[3]="Do not include the gitignore patterns"
     descriptions[4]="Initialize cloak in your project"
-    descriptions[5]="Decrypt a file"
-    descriptions[6]="Lists the files considered in the encryption process"
+    descriptions[5]="Lists the files considered in the encryption process"
     descriptions[7]="Generates various files"
-    descriptions[8]="Do not include the cloakignore patterns"
-    descriptions[9]="Prints the hash of a file"
-    descriptions[10]="Specify the output path"
-    descriptions[12]="Specify the type"
+    descriptions[8]="Prints the hash of a file"
+    descriptions[9]="Encrypt a file or a directory"
+    descriptions[10]="Do not include the cloakignore patterns"
+    descriptions[12]="Specify the output path"
+    descriptions[13]="Specify the type"
     descriptions[15]="Prints the help message"
     descriptions[16]="Prints the project version"
     descriptions[18]="Specify the encryption key path"
 
     local -A literal_transitions
-    literal_transitions[1]="([16]=2 [2]=3 [5]=4 [4]=2 [6]=5 [15]=2 [7]=6 [8]=2 [9]=7 [17]=2)"
-    literal_transitions[3]="([1]=17 [19]=17)"
-    literal_transitions[4]="([1]=8 [19]=8)"
-    literal_transitions[5]="([1]=13 [8]=2 [3]=15 [19]=13)"
-    literal_transitions[6]="([12]=16)"
-    literal_transitions[7]="([1]=11 [19]=11)"
-    literal_transitions[9]="([11]=12 [10]=12 [18]=11)"
-    literal_transitions[10]="([18]=11)"
-    literal_transitions[14]="([3]=15 [8]=2)"
-    literal_transitions[15]="([8]=2)"
-    literal_transitions[16]="([13]=2 [14]=2)"
-    literal_transitions[18]="([11]=19 [3]=2 [10]=19)"
+    literal_transitions[1]="([1]=7 [16]=2 [4]=2 [5]=3 [15]=2 [7]=4 [8]=5 [9]=6 [10]=2 [17]=2)"
+    literal_transitions[3]="([2]=13 [10]=2 [3]=15 [19]=13)"
+    literal_transitions[4]="([13]=16)"
+    literal_transitions[5]="([2]=12 [19]=12)"
+    literal_transitions[6]="([2]=17 [19]=17)"
+    literal_transitions[7]="([2]=10 [19]=10)"
+    literal_transitions[9]="([18]=12)"
+    literal_transitions[11]="([11]=8 [12]=8 [18]=12)"
+    literal_transitions[14]="([3]=15 [10]=2)"
+    literal_transitions[15]="([10]=2)"
+    literal_transitions[16]="([6]=2 [14]=2)"
+    literal_transitions[18]="([11]=19 [3]=2 [12]=19)"
     literal_transitions[20]="([3]=2)"
 
     local -A match_anything_transitions
-    match_anything_transitions=([11]=2 [19]=20 [13]=14 [8]=9 [12]=10 [17]=18)
+    match_anything_transitions=([10]=11 [19]=20 [13]=14 [8]=9 [17]=18 [12]=2)
 
     declare -A subword_transitions
 
@@ -75,13 +75,13 @@ _cloak () {
 
         return 1
     done
-    declare -A literal_transitions_level_0=([15]="8" [14]="3 8" [1]="16 2 5 4 6 15 7 8 9" [20]="3" [7]="1" [16]="13 14" [6]="12" [10]="18" [18]="3 10" [4]="1" [5]="1 8 3" [3]="1" [9]="10 18")
-    declare -A literal_transitions_level_1=([18]="11" [9]="11" [5]="19" [4]="19" [3]="19" [1]="17" [7]="19")
+    declare -A literal_transitions_level_0=([3]="2 10 3" [14]="3 10" [1]="1 16 4 5 15 7 8 9 10" [20]="3" [7]="2" [16]="6 14" [6]="2" [18]="3 12" [4]="13" [11]="12 18" [15]="10" [5]="2" [9]="18")
+    declare -A literal_transitions_level_1=([18]="11" [6]="19" [11]="11" [5]="19" [3]="19" [1]="17" [7]="19")
     declare -A subword_transitions_level_0=()
     declare -A subword_transitions_level_1=()
     declare -A commands_level_0=()
     declare -A commands_level_1=()
-    declare -A specialized_commands_level_0=([12]="0" [17]="0" [19]="0" [13]="0" [8]="0" [11]="0")
+    declare -A specialized_commands_level_0=([17]="0" [10]="0" [19]="0" [13]="0" [8]="0" [12]="0")
     declare -A specialized_commands_level_1=()
 
      local max_fallback_level=1
