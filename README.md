@@ -18,7 +18,7 @@ cloak decrypt -i <PATH> -o <PATH> -k <KEY-PATH>
 cloak hash -i <PATH>
 ```
 
-## List files used in the encryption progress
+### List files used in the encryption progress
 ```bash
 cloak ls
 ```
