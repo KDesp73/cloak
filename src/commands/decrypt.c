@@ -24,7 +24,39 @@ static void removeSubstring(char* str, const char* sub) {
     }
 }
 
-int decryptFile(const char* in, const char* out, unsigned char key[CLOAK_KEY_SIZE])
+static char* get_decrypted_path(const char *in)
+{
+    // Remove ".cloak" extension
+    char *temp = strdup(in);
+    if (!temp) return NULL;
+
+    removeSubstring(temp, ".cloak");
+
+    // Create a pointer to traverse the temp string safely
+    char *trimmed_temp = temp;
+
+    // Skip leading "./" to avoid redundant paths
+    while (*trimmed_temp == '.' && *(trimmed_temp + 1) == '/') {
+        trimmed_temp += 2; // Move past "./"
+    }
+
+    // Allocate memory for the new path
+    size_t new_size = strlen(CLOAK_CONFIG_DEFAULT_DECRYPTED) + strlen(trimmed_temp) + 2;
+    char *output = malloc(new_size);
+    if (!output) {
+        perror("Memory allocation failed");
+        free(temp);  // Free original strdup memory
+        return NULL;
+    }
+
+    // Construct the final path
+    snprintf(output, new_size, "%s/%s", CLOAK_CONFIG_DEFAULT_DECRYPTED, trimmed_temp);
+
+    free(temp); // Free original strdup memory (safe now)
+    return output;
+}
+
+static int decryptFile(const char* in, const char* out, unsigned char key[CLOAK_KEY_SIZE])
 {
     char* zip = NULL;
     asprintf(&zip, "%s.bin", in);
@@ -40,10 +72,11 @@ int decryptFile(const char* in, const char* out, unsigned char key[CLOAK_KEY_SIZ
     if(out) {
         output = strdup(out);
     } else {
-        output = strdup(in);
-        removeSubstring(output, ".cloak");
+        output = get_decrypted_path(in);
+        create_parent_directories(output);
     }
 
+    /*
     if(is_file(output)) {
         WARN("%s already exists", output);
         file_delete(zip);
@@ -51,8 +84,9 @@ int decryptFile(const char* in, const char* out, unsigned char key[CLOAK_KEY_SIZ
         free(output);
         return false;
     }
+    */
 
-    if(CLOAK_Decompress(zip, out) != 0){
+    if(CLOAK_Decompress(zip, output) != 0){
         ERRO("Failed decompressing file %s", in);
         file_delete(zip);
         free(zip);
@@ -100,7 +134,7 @@ static int decryptMultiple(const char* in, const char* out, unsigned char key[CL
                 *last_slash = '/'; // Restore full path
             }
         } else {
-            final_output = strdup(output); // Default to file name
+            final_output = NULL;
         }
 
         if (!decryptFile(list.files[i], final_output, key)) {

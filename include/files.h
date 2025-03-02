@@ -2,6 +2,7 @@
 #define FILES_H
 
 #include <errno.h>
+#include <linux/limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -94,6 +95,85 @@ static inline bool dir_exists(const char *path)
 {
     struct stat st;
     return (stat(path, &st) == 0) && S_ISDIR(st.st_mode);
+}
+
+static inline int create_directories(const char *path)
+{
+    char temp[PATH_MAX];
+    char *p = NULL;
+    size_t len;
+
+    // Copy path to a mutable string
+    snprintf(temp, sizeof(temp), "%s", path);
+    len = strlen(temp);
+
+    // Remove trailing '/' if it exists
+    if (temp[len - 1] == '/') {
+        temp[len - 1] = '\0';
+    }
+
+    // Iterate over the path and create directories one by one
+    for (p = temp + 1; *p; p++) {
+        if (*p == '/') {
+            *p = '\0'; // Temporarily end the string here
+
+            // Try creating the directory
+            if (mkdir(temp, 0755) && errno != EEXIST) {
+                perror("mkdir failed");
+                return -1; // Failure
+            }
+
+            *p = '/'; // Restore slash
+        }
+    }
+
+    // Final directory or file parent
+    if (mkdir(temp, 0755) && errno != EEXIST) {
+        perror("mkdir failed");
+        return -1;
+    }
+
+    return 0; // Success
+}
+
+static inline int create_parent_directories(const char *path)
+{
+    char temp[PATH_MAX];
+    char *p = NULL;
+
+    // Copy path into a mutable buffer
+    snprintf(temp, sizeof(temp), "%s", path);
+
+    // Remove the file name to get only the directory path
+    char *last_slash = strrchr(temp, '/');
+    if (!last_slash) {
+        // No slashes means there's no directory to create
+        return 0;
+    }
+    *last_slash = '\0'; // Trim to parent directory path
+
+    // Iterate over the path and create directories one by one
+    for (p = temp + 1; *p; p++) {
+        if (*p == '/') {
+            *p = '\0'; // Temporarily end string here
+
+            // Try creating the directory
+            if (mkdir(temp, 0755) && errno != EEXIST) {
+                perror("mkdir failed");
+                return -1;
+            }
+
+            *p = '/'; // Restore slash
+        }
+    }
+
+    // Create the final directory in the path
+    if (mkdir(temp, 0755) && errno != EEXIST) {
+        perror("mkdir failed");
+        return -1;
+    }
+
+    return 0; // Success
 }
 
 #ifdef CLOAK_REMOVE_PREFIXES

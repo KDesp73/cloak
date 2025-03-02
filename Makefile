@@ -84,6 +84,13 @@ clean: ## Remove all build files and the executable
 	@echo "[INFO] Cleaning up build directory and executable."
 	rm -rf $(BUILD_DIR) $(TARGET) $(SO_NAME) $(A_NAME)
 
+.PHONY: clean_cloak
+clean_cloak: ## Remove all cloak related files
+	rm -r ./src/*.cloak
+	rm -r ./include/*.cloak
+	rm aes.key
+	rm -r .cloak/decrypted/*
+
 .PHONY: distclean
 distclean: clean ## Perform a full clean, including backup and temporary files
 	@echo "[INFO] Performing full clean, removing build directory, dist files, and editor backups."
