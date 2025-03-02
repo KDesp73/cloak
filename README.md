@@ -18,11 +18,16 @@ cloak decrypt -i <PATH> -o <PATH> -k <KEY-PATH>
 cloak hash -i <PATH>
 ```
 
+## List files used in the encryption progress
+```bash
+cloak ls
+```
+
 ## Ignore file
 
 The `.cloakignore` file is being used to define the patterns that are being ignored in the encryption process.
 
-Anything inside the `.gitignore` file is also included in this list
+Anything inside the `.gitignore` file is also included in this list depending on the configuration used
 
 ### Patterns ignored by default
 
@@ -30,6 +35,7 @@ Anything inside the `.gitignore` file is also included in this list
 - `.cloakignore`
 - `*.cloak`
 - `cloak.ini`
+- `.cloak/*`
 
 ## License
 

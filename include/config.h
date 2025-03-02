@@ -3,8 +3,14 @@
 
 #include <stdbool.h>
 #include <stddef.h>
-#define CLOAK_CONFIG_FILE "cloak.ini"
-#define CLOAK_CONFIG_DIRECTORY ".cloak"
+
+#define CLOAK_CONFIG_FILE                "cloak.ini"
+#define CLOAK_CONFIG_DIRECTORY           ".cloak"
+#define CLOAK_CONFIG_DEFAULT_BACKUP      ".cloak/backup"
+#define CLOAK_CONFIG_DEFAULT_DECRYPTED   ".cloak/decrypted"
+#define CLOAK_CONFIG_DEFAULT_RSA_PRIVATE ".cloak/private.pem"
+#define CLOAK_CONFIG_DEFAULT_RSA_PUBLIC  ".cloak/public.pem"
+
 
 void CLOAK_ConfigDirCreate();
 
@@ -32,7 +38,7 @@ void CLOAK_ConfigFree(CLOAK_Config* config);
 char* CLOAK_ConfigGet(const CLOAK_Config* config, const char* section, const char* key);
 void CLOAK_ConfigPrint(const CLOAK_Config* config);
 
-#define BOOL(x) (strcmp(x, "true") == 0 || strcmp(x, "TRUE") == 0 || strcmp(x, "yes") == 0 || strcmp(x, "YES") == 0)
+#define BOOL(x) (strcmp(x, "true") == 0 || strcmp(x, "TRUE") == 0 || strcmp(x, "yes") == 0 || strcmp(x, "YES") == 0 || strcmp(x, "1") == 0)
 
 #define CLOAK_CONFIG_INCLUDE_GITIGNORE "ignore", "include_gitignore"
 #define CLOAK_CONFIG_BACKUP "paths", "backup"
@@ -56,6 +62,12 @@ void CLOAK_ConfigPrint(const CLOAK_Config* config);
 #define ConfigAddEntry CLOAK_ConfigAddEntry
 #define ConfigGet CLOAK_ConfigGet
 #define ConfigPrint CLOAK_ConfigPrint
+
+#define CONFIG_INCLUDE_GITIGNORE CLOAK_CONFIG_INCLUDE_GITIGNORE
+#define CONFIG_BACKUP CLOAK_CONFIG_BACKUP
+#define CONFIG_DECRYPTED CLOAK_CONFIG_DECRYPTED
+#define CONFIG_RSA_PRIVATE CLOAK_CONFIG_RSA_PRIVATE
+#define CONFIG_RSA_PUBLIC CLOAK_CONFIG_RSA_PUBLIC
 
 #endif // CLOAK_REMOVE_PREFIXES
 
