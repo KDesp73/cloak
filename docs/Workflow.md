@@ -48,7 +48,7 @@ To integrate the Cloak tool into a CI/CD pipeline, follow these steps:
      ```yaml
      steps:
        - name: Encrypt Source Code
-         run: cloak encrypt --input ./src --output ./encrypted --key-file ./path/to/public_key
+         run: cloak encrypt --input . --output ./encrypted
      ```
 
 2. **Decrypt Files During Deployment**:
@@ -57,7 +57,7 @@ To integrate the Cloak tool into a CI/CD pipeline, follow these steps:
      ```yaml
      steps:
        - name: Decrypt Source Code
-         run: cloak decrypt --input ./encrypted --output ./decrypted --key-file ./path/to/private_key
+         run: cloak decrypt --input ./encrypted --output ./decrypted --key ./path/to/cloak.key
      ```
 
 3. **Automated Key Rotation**:

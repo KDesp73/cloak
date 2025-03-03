@@ -88,7 +88,7 @@ clean: clean_cloak ## Remove all build files and the executable
 clean_cloak: ## Remove all cloak related files
 	rm -rf ./src/*.cloak
 	rm -rf ./include/*.cloak
-	rm -f .cloak/cloak.key
+	rm -f cloak.key
 	rm -rf .cloak/decrypted/*
 
 .PHONY: distclean

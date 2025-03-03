@@ -8,7 +8,7 @@
 #define CLOAK_KEY_SIZE crypto_secretbox_KEYBYTES
 #define CLOAK_NONCE_SIZE crypto_secretbox_NONCEBYTES
 #define CLOAK_MAC_SIZE crypto_secretbox_MACBYTES
-#define CLOAK_KEY_FILE ".cloak/cloak.key"
+#define CLOAK_KEY_FILE "cloak.key"
 
 void CLOAK_AESGenerateKey(unsigned char key[CLOAK_KEY_SIZE]);
 int CLOAK_AESEncryptFile(const char *input_file, const char *output_file, unsigned char key[CLOAK_KEY_SIZE]);
