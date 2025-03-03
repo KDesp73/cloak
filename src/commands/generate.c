@@ -2,6 +2,7 @@
 #include "config.h"
 #include "extern/logging.h"
 #include "files.h"
+#include "rsa.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -133,6 +134,9 @@ int CLOAK_CommandGenerate(CLOAK_Context* ctx)
         if(install_autocompletion(FISH_AUTOCOMPLETION_SCRIPT, FISH_AUTOCOMPLETION_PATH))
             INFO("Installed fish autocompletion");
         else ERRO("Failed to install fish autocompletion");
+    } else if(!strcmp(type, "rsa")) {
+        CLOAK_RSAGenerateKeys();
+        INFO("RSA keys generated successfully!");
     }
     
 

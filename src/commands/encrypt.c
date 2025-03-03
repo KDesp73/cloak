@@ -1,9 +1,11 @@
 #include "commands.h"
 #include "aes.h"
 #include "compression.h"
+#include "config.h"
 #include "context.h"
 #include "extern/logging.h"
 #include "files.h"
+#include "rsa.h"
 #include "listing.h"
 
 #include <stdio.h>
@@ -68,14 +70,23 @@ int CLOAK_CommandEncrypt(CLOAK_Context* ctx)
     }
 
     
-    // TODO: Sign key using RSA
+
+    unsigned char rsa_encrypted_key[CLOAK_RSA_KEY_SIZE];
+    size_t encrypted_key_len;
+    // TODO: change the public key path to match the config
+    if(CLOAK_RSAEncrypt(key, CLOAK_KEY_SIZE, CLOAK_CONFIG_DEFAULT_RSA_PUBLIC, rsa_encrypted_key, &encrypted_key_len) != 0) {
+        ERRO("RSA encryption failed");
+        return false;
+    }
+
     FILE* key_file = fopen(CLOAK_KEY_FILE, "wb");
     if (!key_file) {
         ERRO("Failed to open key file for writing.");
         return false;
     }
 
-    fwrite(key, 1, CLOAK_KEY_SIZE, key_file);
+    // fwrite(key, 1, CLOAK_KEY_SIZE, key_file); // NOTE: No RSA encryption
+    fwrite(rsa_encrypted_key, 1, encrypted_key_len, key_file);
     fclose(key_file);
 
     return true;

@@ -1,7 +1,7 @@
 # Compiler and flags
 CC = gcc
 CFLAGS = -Wall -Werror -Iinclude -fPIC
-LDFLAGS = -Llib -l:libsodium.a -l:libz.a -lcurl
+LDFLAGS = -Llib -l:libsodium.a -l:libz.a -lcurl -lssl -lcrypto -ldl
 
 # Directories
 SRC_DIR = src
@@ -80,16 +80,16 @@ static: $(BUILD_DIR) $(OBJ_FILES) ## Build static library
 	@$(AR) rcs $(A_NAME) $(OBJ_FILES)
 
 .PHONY: clean
-clean: ## Remove all build files and the executable
+clean: clean_cloak ## Remove all build files and the executable
 	@echo "[INFO] Cleaning up build directory and executable."
 	rm -rf $(BUILD_DIR) $(TARGET) $(SO_NAME) $(A_NAME)
 
 .PHONY: clean_cloak
 clean_cloak: ## Remove all cloak related files
-	rm -r ./src/*.cloak
-	rm -r ./include/*.cloak
-	rm aes.key
-	rm -r .cloak/decrypted/*
+	rm -rf ./src/*.cloak
+	rm -rf ./include/*.cloak
+	rm -f aes.key
+	rm -rf .cloak/decrypted/*
 
 .PHONY: distclean
 distclean: clean ## Perform a full clean, including backup and temporary files

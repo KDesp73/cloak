@@ -149,4 +149,5 @@ static void generateHelp()
     PB("TYPES");
     PI("ini                        `cloak.ini` config file");
     PI("autocomplete               Autocompletion scripts for bash, zsh and fish");
+    PI("rsa                        Private and public RSA keys located in .cloak/");
 }

@@ -1,9 +1,13 @@
-#ifndef KEYS_H
-#define KEYS_H
+#ifndef RSA_H
+#define RSA_H
 
 #include "aes.h"
 #include <sodium.h>
 #include <string.h>
+
+#define CLOAK_RSA_KEY_SIZE 256
+
+void CLOAK_RSAGenerateKeys();
 
 bool CLOAK_DeriveKey(const char *password, unsigned char *key, const unsigned char *salt);
 
@@ -22,4 +26,4 @@ int CLOAK_RSADecrypt(const unsigned char *encrypted_key, size_t encrypted_key_le
 #endif // CLOAK_REMOVE_PREFIXES
 
 
-#endif // KEYS_H
+#endif // RSA_H

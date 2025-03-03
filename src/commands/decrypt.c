@@ -1,9 +1,11 @@
 #include "commands.h"
 #include "aes.h"
 #include "compression.h"
+#include "config.h"
 #include "context.h"
 #include "extern/logging.h"
 #include "files.h"
+#include "rsa.h"
 #include "listing.h"
 
 #include <stdio.h>
@@ -156,32 +158,45 @@ int CLOAK_CommandDecrypt(CLOAK_Context* ctx)
 {
     const char* key_path = (ctx->key) ? ctx->key : CLOAK_KEY_FILE;
 
-    unsigned char key[CLOAK_KEY_SIZE];
+    unsigned char key[CLOAK_RSA_KEY_SIZE];
     FILE* key_file = fopen(key_path, "rb");
     if (!key_file) {
         ERRO("Failed to open key file for reading.");
         return false;
     }
 
-    // TODO: decrypt using public rsa key
-
-    if (fread(key, 1, CLOAK_KEY_SIZE, key_file) != CLOAK_KEY_SIZE) {
+    // Read the entire RSA-encrypted AES key (256 bytes)
+    if (fread(key, 1, CLOAK_RSA_KEY_SIZE, key_file) != CLOAK_RSA_KEY_SIZE) {
         ERRO("Failed to read the complete key from file.");
         fclose(key_file);
         return false;
     }
     fclose(key_file);
 
+    unsigned char aes_key[CLOAK_KEY_SIZE];
+    size_t aes_key_len = 0;
+
+    if (!CLOAK_RSADecrypt(key, CLOAK_RSA_KEY_SIZE, CLOAK_CONFIG_DEFAULT_RSA_PRIVATE, aes_key, &aes_key_len)) {
+        ERRO("RSA decryption failed");
+        return false;
+    }
+
+    if (aes_key_len != CLOAK_KEY_SIZE) {
+        ERRO("Decrypted AES key length is incorrect.");
+        return false;
+    }
+
     if (ctx->is_dir) {
-        if(!decryptMultiple(ctx->input, ctx->output, key)) {
+        if (!decryptMultiple(ctx->input, ctx->output, aes_key)) {
             INFO("Aborting...");
             return false;
         }
     } else {
-        if(!decryptFile(ctx->input, ctx->output, key))
+        if (!decryptFile(ctx->input, ctx->output, aes_key)) {
             return false;
+        }
     }
-    
+
     return true;
 }
 

@@ -10,7 +10,7 @@
 static bool sodiumInit(void)
 {
     if (sodium_init() < 0) {
-        fprintf(stderr, "libsodium initialization failed!\n");
+        ERRO("libsodium initialization failed!");
         return false;
     }
     return true;
@@ -137,7 +137,6 @@ int CLOAK_AESDecryptFile(const char *input_file, const char *output_file, unsign
         remaining -= bytes_read;
 
         if (crypto_secretbox_open_easy(decrypted, buffer, bytes_read, nonce, key) != 0) {
-            ERRO("Decryption failed!");
             fclose(fin);
             fclose(fout);
             return -1;
@@ -173,12 +172,12 @@ int CLOAK_AESDecryptChunk(const unsigned char *input, size_t input_size,
 {
     if(!sodiumInit()) return -1;
     if (input_size < crypto_secretbox_MACBYTES) {
-        fprintf(stderr, "Invalid input size for decryption\n");
+        ERRO("Invalid input size for decryption");
         return -1;
     }
 
     if (crypto_secretbox_open_easy(output, input, input_size, nonce, key) != 0) {
-        fprintf(stderr, "Decryption failed\n");
+        ERRO("Decryption failed");
         return -1;
     }
 

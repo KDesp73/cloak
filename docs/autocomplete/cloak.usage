@@ -17,6 +17,6 @@ cloak <COMMANDS> | <HELP> || <VERSION>;
 <GI-IGNORE> ::= (--gitignore-ignore) "Do not include the gitignore patterns";
 <CI-IGNORE> ::= (--cloakignore-ignore) "Do not include the cloakignore patterns";
 
-<TYPES> ::= (ini | autocomplete);
+<TYPES> ::= (ini | autocomplete | rsa);
 <TYPE> ::= (--type <TYPES>) "Specify the type";
 
