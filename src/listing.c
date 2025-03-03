@@ -10,13 +10,14 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#define CLOAK_IGNORED_LEN 5
+#define CLOAK_IGNORED_LEN 6
 static char CLOAK_Ignored[CLOAK_IGNORED_LEN][64] = {
     ".git*",
     CLOAK_IGNORE_FILE,
     "*.cloak",
     "cloak.ini",
-    ".cloak/*"
+    ".cloak/*",
+    "cloak.key"
 };
 
 static size_t loadPatternsFromFile(char*** patterns, const char* path, size_t count)
