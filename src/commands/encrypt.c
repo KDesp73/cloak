@@ -52,8 +52,15 @@ int CLOAK_CommandEncrypt(CLOAK_Context* ctx)
     unsigned char key[CLOAK_KEY_SIZE];
     CLOAK_AESGenerateKey(key);
 
-    // TODO: backup file or directory
+    // Step 1: Sign the AES key
+    unsigned char signature[CLOAK_RSA_SIGNATURE_SIZE];
+    size_t signature_len = 0;
+    if (CLOAK_RSASign(key, CLOAK_KEY_SIZE, CLOAK_CONFIG_DEFAULT_RSA_PRIVATE, signature, &signature_len) != 0) {
+        ERRO("Failed to sign the AES key");
+        return false;
+    }
 
+    // Step 2: Encrypt files or directories
     if (ctx->is_dir) {
         CLOAK_List list = {0};
         CLOAK_ListLoad(&list, ctx->input, ctx->include_gitignore, ctx->include_cloakignore);
@@ -69,24 +76,30 @@ int CLOAK_CommandEncrypt(CLOAK_Context* ctx)
             return false;
     }
 
-    
+    // Step 3: Encrypt the AES key with RSA
+    const char* public_rsa_path = CLOAK_ConfigGet(&ctx->config, CLOAK_CONFIG_RSA_PUBLIC);
+    if(!public_rsa_path) public_rsa_path = CLOAK_CONFIG_DEFAULT_RSA_PUBLIC;
 
     unsigned char rsa_encrypted_key[CLOAK_RSA_KEY_SIZE];
     size_t encrypted_key_len;
-    // TODO: change the public key path to match the config
-    if(CLOAK_RSAEncrypt(key, CLOAK_KEY_SIZE, CLOAK_CONFIG_DEFAULT_RSA_PUBLIC, rsa_encrypted_key, &encrypted_key_len) != 0) {
+    if(!CLOAK_RSAEncrypt(key, CLOAK_KEY_SIZE, public_rsa_path, rsa_encrypted_key, &encrypted_key_len)) {
         ERRO("RSA encryption failed");
         return false;
     }
 
+    // Step 4: Save the RSA-encrypted key and signature
     FILE* key_file = fopen(CLOAK_KEY_FILE, "wb");
     if (!key_file) {
         ERRO("Failed to open key file for writing.");
         return false;
     }
 
-    // fwrite(key, 1, CLOAK_KEY_SIZE, key_file); // NOTE: No RSA encryption
+    // Save the RSA-encrypted AES key
     fwrite(rsa_encrypted_key, 1, encrypted_key_len, key_file);
+
+    // Save the signature of the AES key (this can be saved in a separate file if needed)
+    fwrite(signature, 1, signature_len, key_file);
+
     fclose(key_file);
 
     return true;

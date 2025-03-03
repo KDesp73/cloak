@@ -176,8 +176,6 @@ int CLOAK_RSADecrypt(const unsigned char* encrypted, size_t encrypted_len,
     }
 
     // **Step 1: Verify Encrypted Key Length**
-    printf("[DEBU] Encrypted Key Length: %zu\n", encrypted_len);
-
     size_t decrypted_len = 0;
     if (EVP_PKEY_decrypt(ctx, NULL, &decrypted_len, encrypted, encrypted_len) <= 0) {
         ERR_print_errors_fp(stderr);
@@ -202,13 +200,6 @@ int CLOAK_RSADecrypt(const unsigned char* encrypted, size_t encrypted_len,
         return false;
     }
 
-    // **Debug Output**
-    printf("[DEBU] Decrypted Key Length: %zu\n", decrypted_len);
-    for (size_t i = 0; i < decrypted_len; i++) {
-        printf("%02X ", decrypted[i]);
-    }
-    printf("\n");
-
     // **Ensure AES Key is Exactly 32 Bytes**
     if (decrypted_len < CLOAK_KEY_SIZE) {
         ERRO("Decrypted key too short!");
@@ -226,4 +217,105 @@ int CLOAK_RSADecrypt(const unsigned char* encrypted, size_t encrypted_len,
     EVP_PKEY_CTX_free(ctx);
 
     return true;
+}
+
+int CLOAK_RSASign(const unsigned char *aes_key, size_t aes_key_len, const char *private_key_path, unsigned char *signature, size_t *signature_len)
+{
+    FILE *key_file = fopen(private_key_path, "rb");
+    if (!key_file) {
+        perror("Failed to open private key file for signing.");
+        return -1;
+    }
+
+    EVP_PKEY *private_key = PEM_read_PrivateKey(key_file, NULL, NULL, NULL);
+    fclose(key_file);
+    if (!private_key) {
+        fprintf(stderr, "Failed to read private key\n");
+        return -1;
+    }
+
+    EVP_PKEY_CTX *ctx = EVP_PKEY_CTX_new(private_key, NULL);
+    if (!ctx) {
+        EVP_PKEY_free(private_key);
+        return -1;
+    }
+
+    if (EVP_PKEY_sign_init(ctx) <= 0) {
+        ERR_print_errors_fp(stderr);
+        EVP_PKEY_CTX_free(ctx);
+        EVP_PKEY_free(private_key);
+        return -1;
+    }
+
+    // Set the padding (RSA_PKCS1_PADDING for signatures)
+    if (EVP_PKEY_CTX_set_rsa_padding(ctx, RSA_PKCS1_PADDING) <= 0) {
+        ERR_print_errors_fp(stderr);
+        EVP_PKEY_CTX_free(ctx);
+        EVP_PKEY_free(private_key);
+        return -1;
+    }
+
+    // Step 1: Determine the size of the signature
+    if (EVP_PKEY_sign(ctx, NULL, signature_len, aes_key, aes_key_len) <= 0) {
+        ERR_print_errors_fp(stderr);
+        EVP_PKEY_CTX_free(ctx);
+        EVP_PKEY_free(private_key);
+        return -1;
+    }
+
+    // Step 2: Generate the signature
+    if (EVP_PKEY_sign(ctx, signature, signature_len, aes_key, aes_key_len) <= 0) {
+        ERR_print_errors_fp(stderr);
+        EVP_PKEY_CTX_free(ctx);
+        EVP_PKEY_free(private_key);
+        return -1;
+    }
+
+    EVP_PKEY_CTX_free(ctx);
+    EVP_PKEY_free(private_key);
+    return 0;
+}
+
+int CLOAK_RSAVerify(const unsigned char *aes_key, size_t aes_key_len, const unsigned char *signature, size_t signature_len, const char *public_key_path)
+{
+    FILE *key_file = fopen(public_key_path, "rb");
+    if (!key_file) {
+        perror("Failed to open public key file for verification.");
+        return -1;
+    }
+
+    EVP_PKEY *public_key = PEM_read_PUBKEY(key_file, NULL, NULL, NULL);
+    fclose(key_file);
+    if (!public_key) {
+        fprintf(stderr, "Failed to read public key\n");
+        return -1;
+    }
+
+    EVP_PKEY_CTX *ctx = EVP_PKEY_CTX_new(public_key, NULL);
+    if (!ctx) {
+        EVP_PKEY_free(public_key);
+        return -1;
+    }
+
+    if (EVP_PKEY_verify_init(ctx) <= 0) {
+        ERR_print_errors_fp(stderr);
+        EVP_PKEY_CTX_free(ctx);
+        EVP_PKEY_free(public_key);
+        return -1;
+    }
+
+    // Set the padding (RSA_PKCS1_PADDING for signatures)
+    if (EVP_PKEY_CTX_set_rsa_padding(ctx, RSA_PKCS1_PADDING) <= 0) {
+        ERR_print_errors_fp(stderr);
+        EVP_PKEY_CTX_free(ctx);
+        EVP_PKEY_free(public_key);
+        return -1;
+    }
+
+    // Verify the signature
+    int verify_result = EVP_PKEY_verify(ctx, signature, signature_len, aes_key, aes_key_len);
+    EVP_PKEY_CTX_free(ctx);
+    EVP_PKEY_free(public_key);
+
+    return (verify_result == 1) ? 0 : -1;  // Return 0 on success, -1 on failure
 }

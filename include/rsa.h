@@ -6,6 +6,7 @@
 #include <string.h>
 
 #define CLOAK_RSA_KEY_SIZE 256
+#define CLOAK_RSA_SIGNATURE_SIZE 256
 
 void CLOAK_RSAGenerateKeys();
 
@@ -14,10 +15,11 @@ bool CLOAK_DeriveKey(const char *password, unsigned char *key, const unsigned ch
 
 int CLOAK_RSAEncrypt(const unsigned char *aes_key, size_t aes_key_len, 
                     const char *public_key_path, unsigned char *encrypted_key, size_t *encrypted_key_len);
-
 int CLOAK_RSADecrypt(const unsigned char *encrypted_key, size_t encrypted_key_len, 
                     const char *private_key_path, unsigned char *aes_key, size_t *aes_key_len);
 
+int CLOAK_RSASign(const unsigned char *aes_key, size_t aes_key_len, const char *private_key_path, unsigned char *signature, size_t *signature_len);
+int CLOAK_RSAVerify(const unsigned char *aes_key, size_t aes_key_len, const unsigned char *signature, size_t signature_len, const char *public_key_path);
 
 #ifdef CLOAK_REMOVE_PREFIXES
 #define DeriveKey CLOAK_DeriveKey

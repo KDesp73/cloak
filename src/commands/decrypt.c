@@ -165,27 +165,49 @@ int CLOAK_CommandDecrypt(CLOAK_Context* ctx)
         return false;
     }
 
-    // Read the entire RSA-encrypted AES key (256 bytes)
+    // Read the RSA-encrypted AES key (CLOAK_RSA_KEY_SIZE bytes)
     if (fread(key, 1, CLOAK_RSA_KEY_SIZE, key_file) != CLOAK_RSA_KEY_SIZE) {
-        ERRO("Failed to read the complete key from file.");
+        ERRO("Failed to read the complete RSA-encrypted AES key from file.");
         fclose(key_file);
         return false;
     }
+
+    // Read the signature for the AES key (CLOAK_RSA_SIGNATURE_SIZE bytes)
+    unsigned char signature[CLOAK_RSA_SIGNATURE_SIZE];
+    size_t signature_len = fread(signature, 1, CLOAK_RSA_SIGNATURE_SIZE, key_file);
     fclose(key_file);
+
+    if (signature_len != CLOAK_RSA_SIGNATURE_SIZE) {
+        ERRO("Failed to read the complete signature or incorrect signature size.");
+        return false;
+    }
+
+    // Decrypt the AES key using the private RSA key
+    const char* private_rsa_path = CLOAK_ConfigGet(&ctx->config, CLOAK_CONFIG_RSA_PRIVATE);
+    if(!private_rsa_path) private_rsa_path = CLOAK_CONFIG_DEFAULT_RSA_PRIVATE;
 
     unsigned char aes_key[CLOAK_KEY_SIZE];
     size_t aes_key_len = 0;
 
-    if (!CLOAK_RSADecrypt(key, CLOAK_RSA_KEY_SIZE, CLOAK_CONFIG_DEFAULT_RSA_PRIVATE, aes_key, &aes_key_len)) {
+    // Decrypt the AES key using RSA
+    if (!CLOAK_RSADecrypt(key, CLOAK_RSA_KEY_SIZE, private_rsa_path, aes_key, &aes_key_len)) {
         ERRO("RSA decryption failed");
         return false;
     }
 
+    // Check that the AES key length is correct
     if (aes_key_len != CLOAK_KEY_SIZE) {
         ERRO("Decrypted AES key length is incorrect.");
         return false;
     }
 
+    // Verify the signature of the AES key
+    if (CLOAK_RSAVerify(aes_key, aes_key_len, signature, signature_len, CLOAK_CONFIG_DEFAULT_RSA_PUBLIC) != 0) {
+        ERRO("AES key signature verification failed.");
+        return false;
+    }
+
+    // Decrypt files or directories
     if (ctx->is_dir) {
         if (!decryptMultiple(ctx->input, ctx->output, aes_key)) {
             INFO("Aborting...");
