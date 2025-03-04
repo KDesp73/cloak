@@ -17,4 +17,13 @@ void CLOAK_ValidateSignatures(const CLOAK_SignatureList* signatures, const CLOAK
 void CLOAK_FreeSignatures(CLOAK_SignatureList* signatures);
 
 
+#ifdef CLOAK_REMOVE_PREFIXES
+#define SIGNATURE_FILE CLOAK_SIGNATURE_FILE
+#define Signature CLOAK_Signature
+#define SignatureList CLOAK_SignatureList
+#define LoadSignatures CLOAK_LoadSignatures
+#define ValidateSignatures CLOAK_ValidateSignatures
+#define FreeSignatures CLOAK_FreeSignatures
+#endif // CLOAK_REMOVE_PREFIXES
+
 #endif // SIGNATURE_H

@@ -133,6 +133,11 @@ static void lsHelp()
     PI("-i --input <PATH>          Specify the input path");
     PI("-G --gitignore-ignore      Do not include the gitignore patterns");
     PI("-C --cloakignore-ignore    Do not include the cloakignore patterns");
+    PI("-t --type                  Specify what to print");
+
+    PB("TYPES");
+    PI("files                      The default type");
+    PI("signatures                 Signatures that have signed the cloak key");
 }
 
 static void generateHelp()
