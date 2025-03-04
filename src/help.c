@@ -70,7 +70,7 @@ static void help()
     PI("-o --output <PATH>         Specify the output path");
     PI("-G --gitignore-ignore      Do not include the gitignore patterns");
     PI("-C --cloakignore-ignore    Do not include the cloakignore patterns");
-    PI("-t --type                  Specify the type");
+    PI("-t --type <TYPE>           Specify the type");
 }
 
 static void encryptHelp()
@@ -134,6 +134,7 @@ static void lsHelp()
     PI("-G --gitignore-ignore      Do not include the gitignore patterns");
     PI("-C --cloakignore-ignore    Do not include the cloakignore patterns");
     PI("-t --type                  Specify what to print");
+    printf("\n");
 
     PB("TYPES");
     PI("files                      The default type");
