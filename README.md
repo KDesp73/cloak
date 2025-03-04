@@ -37,6 +37,7 @@ Anything inside the `.gitignore` file is also included in this list depending on
 - `cloak.ini`
 - `.cloak/*`
 - `cloak.key`
+- `cloak.sig`
 
 ## License
 

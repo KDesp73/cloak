@@ -89,6 +89,7 @@ clean_cloak: ## Remove all cloak related files
 	rm -rf ./src/*.cloak
 	rm -rf ./include/*.cloak
 	rm -f cloak.key
+	rm -f cloak.sig
 	rm -rf .cloak/decrypted/*
 
 .PHONY: distclean
