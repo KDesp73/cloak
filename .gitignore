@@ -9,3 +9,4 @@ libcloak.*
 *.o
 *.txt
 *.key
+*.sig
