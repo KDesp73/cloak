@@ -1,0 +1,34 @@
+name: Verify Cloak Encryption
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  verify-encryption:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Cloak
+        run: |
+          curl -fsSL https://example.com/install-cloak.sh | sh
+
+      - name: Verify Signatures on Encrypted Keys
+        run: |
+          for key_file in $(find . -name "*.cloak"); do
+            echo "Verifying: $key_file"
+            if ! cloak decrypt --verify-only --key "$key_file"; then
+              echo "Signature verification failed for $key_file"
+              exit 1
+            fi
+          done
+
+      - name: Proceed if verification passed
+        run: echo "All signatures are valid!"
+

@@ -10,6 +10,7 @@ const char* ini =
 "[paths]\n"
 "backup = .cloak/backup\n"
 "decrypted = .cloak/decrypted\n"
+"keys = .cloak/keys\n"
 "rsa_private = .cloak/private.pem\n"
 "rsa_public = .cloak/public.pem\n"
 "\n"

@@ -75,3 +75,4 @@ void CLOAK_ConfigEntryFree(CLOAK_ConfigEntry* entry)
     free(entry->key);
     free(entry->value);
 }
+

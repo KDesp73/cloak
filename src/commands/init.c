@@ -13,6 +13,7 @@ int CLOAK_CommandInit(CLOAK_Context* ctx)
     dir_create(CLOAK_CONFIG_DIRECTORY);
     dir_create(CLOAK_CONFIG_DEFAULT_BACKUP);
     dir_create(CLOAK_CONFIG_DEFAULT_DECRYPTED);
+    dir_create(CLOAK_CONFIG_DEFAULT_KEYS);
 
     return true;
 }

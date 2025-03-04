@@ -183,8 +183,7 @@ int CLOAK_CommandDecrypt(CLOAK_Context* ctx)
     }
 
     // Decrypt the AES key using the private RSA key
-    const char* private_rsa_path = CLOAK_ConfigGet(&ctx->config, CLOAK_CONFIG_RSA_PRIVATE);
-    if(!private_rsa_path) private_rsa_path = CLOAK_CONFIG_DEFAULT_RSA_PRIVATE;
+    const char* private_rsa_path = CLOAK_CONFIG_GET_RSA_PRIVATE(&ctx->config);
 
     unsigned char aes_key[CLOAK_KEY_SIZE];
     size_t aes_key_len = 0;
@@ -202,7 +201,9 @@ int CLOAK_CommandDecrypt(CLOAK_Context* ctx)
     }
 
     // Verify the signature of the AES key
-    if (CLOAK_RSAVerify(aes_key, aes_key_len, signature, signature_len, CLOAK_CONFIG_DEFAULT_RSA_PUBLIC) != 0) {
+    const char* public_rsa_path = CLOAK_CONFIG_GET_RSA_PUBLIC(&ctx->config);
+    
+    if (CLOAK_RSAVerify(aes_key, aes_key_len, signature, signature_len, public_rsa_path) != 0) {
         ERRO("AES key signature verification failed.");
         return false;
     }
