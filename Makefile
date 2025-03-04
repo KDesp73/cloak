@@ -106,6 +106,7 @@ PREFIX = /usr/local
 
 .PHONY: install
 install: all ## Install libraries, headers and executable
+	@echo "[INFO] Installing cloak using" $(PREFIX) "as the prefix"
 	mkdir -p $(PREFIX)/include/cloak
 	cp -r ./include/* $(PREFIX)/include/cloak
 	cp ./libcloak.* $(PREFIX)/lib
@@ -113,6 +114,7 @@ install: all ## Install libraries, headers and executable
 
 .PHONY: uninstall
 uninstall: ## Uninstall cloak from the machine
+	@echo "[INFO] Uninstalling cloak"
 	rm -rf $(PREFIX)/include/cloak
 	rm -f $(PREFIX)/lib/libcloak.*
 	rm -f $(PREFIX)/bin/cloak
