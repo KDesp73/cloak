@@ -28,8 +28,8 @@ To integrate the Cloak tool into a CI/CD pipeline, follow these steps:
 1. **Install Cloak in CI/CD Environment**:
    - Install the Cloak tool on your CI/CD runners. Ensure that the tool is available on all machines involved in the CI/CD pipeline.
 
-2. **Configure Environment Variables**:
-   - Define the necessary environment variables such as paths for RSA keys, directories for encrypted files, and any custom configuration values required for your specific CI/CD pipeline.
+2. **Configure Cloak**:
+   - Define the necessary variables such as paths for RSA keys, directories for encrypted files, and any custom configuration values required for your specific CI/CD pipeline though `cloak.ini`.
 
 3. **RSA Key Management**:
    - Generate a pair of RSA keys for each developer or team (as described in the Cloak documentation). Store the private key securely on each developer's machine, while the public key can be distributed within the CI/CD environment to encrypt files.
