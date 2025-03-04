@@ -102,6 +102,21 @@ dist: $(SRC_FILES) ## Create a tarball of the project
 	mkdir -p $(DIST_DIR)
 	tar -czvf $(DIST_DIR)/$(TARGET)-$(VERSION).tar.gz $(SRC_DIR) $(INCLUDE_DIR) Makefile README.md
 
+PREFIX = /usr/local
+
+.PHONY: install
+install: all ## Install libraries, headers and executable
+	mkdir -p $(PREFIX)/include/cloak
+	cp -r ./include/* $(PREFIX)/include/cloak
+	cp ./libcloak.* $(PREFIX)/lib
+	cp ./cloak $(PREFIX)/bin
+
+.PHONY: uninstall
+uninstall: ## Uninstall cloak from the machine
+	rm -rf $(PREFIX)/include/cloak
+	rm -f $(PREFIX)/lib/libcloak.*
+	rm -f $(PREFIX)/bin/cloak
+
 ## Generate compile_commands.json
 .PHONY: compile_commands.json
 compile_commands.json: $(SRC_FILES) ## Generate compile_commands.json
