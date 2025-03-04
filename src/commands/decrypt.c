@@ -7,6 +7,7 @@
 #include "files.h"
 #include "rsa.h"
 #include "listing.h"
+#include "signature.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -165,20 +166,20 @@ int CLOAK_CommandDecrypt(CLOAK_Context* ctx)
         return false;
     }
 
-    // Read the RSA-encrypted AES key (CLOAK_RSA_KEY_SIZE bytes)
+    // Read the RSA-encrypted AES key
     if (fread(key, 1, CLOAK_RSA_KEY_SIZE, key_file) != CLOAK_RSA_KEY_SIZE) {
         ERRO("Failed to read the complete RSA-encrypted AES key from file.");
         fclose(key_file);
         return false;
     }
-
-    // Read the signature for the AES key (CLOAK_RSA_SIGNATURE_SIZE bytes)
-    unsigned char signature[CLOAK_RSA_SIGNATURE_SIZE];
-    size_t signature_len = fread(signature, 1, CLOAK_RSA_SIGNATURE_SIZE, key_file);
     fclose(key_file);
 
-    if (signature_len != CLOAK_RSA_SIGNATURE_SIZE) {
-        ERRO("Failed to read the complete signature or incorrect signature size.");
+    // Load all signatures
+    CLOAK_SignatureList signatures = {0};
+    CLOAK_LoadSignatures(&signatures);
+
+    if (signatures.count == 0) {
+        ERRO("No signatures found, decryption aborted.");
         return false;
     }
 
@@ -188,23 +189,32 @@ int CLOAK_CommandDecrypt(CLOAK_Context* ctx)
     unsigned char aes_key[CLOAK_KEY_SIZE];
     size_t aes_key_len = 0;
 
-    // Decrypt the AES key using RSA
     if (!CLOAK_RSADecrypt(key, CLOAK_RSA_KEY_SIZE, private_rsa_path, aes_key, &aes_key_len)) {
-        ERRO("RSA decryption failed");
+        ERRO("RSA decryption failed.");
+        CLOAK_FreeSignatures(&signatures);
         return false;
     }
 
-    // Check that the AES key length is correct
     if (aes_key_len != CLOAK_KEY_SIZE) {
         ERRO("Decrypted AES key length is incorrect.");
+        CLOAK_FreeSignatures(&signatures);
         return false;
     }
 
-    // Verify the signature of the AES key
-    const char* public_rsa_path = CLOAK_CONFIG_GET_RSA_PUBLIC(&ctx->config);
-    
-    if (CLOAK_RSAVerify(aes_key, aes_key_len, signature, signature_len, public_rsa_path) != 0) {
-        ERRO("AES key signature verification failed.");
+    // Verify all signatures
+    bool valid = false;
+    for (size_t i = 0; i < signatures.count; i++) {
+        const char* public_rsa_path = CLOAK_CONFIG_GET_RSA_PUBLIC(&ctx->config);
+        if (CLOAK_RSAVerify(aes_key, aes_key_len, signatures.items[i], CLOAK_RSA_SIGNATURE_SIZE, public_rsa_path) == 0) {
+            valid = true;
+            break; // At least one valid signature is enough to proceed
+        }
+    }
+
+    CLOAK_FreeSignatures(&signatures);
+
+    if (!valid) {
+        ERRO("No valid signatures found, decryption aborted.");
         return false;
     }
 

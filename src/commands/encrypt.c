@@ -7,6 +7,7 @@
 #include "files.h"
 #include "rsa.h"
 #include "listing.h"
+#include "signature.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -52,18 +53,7 @@ int CLOAK_CommandEncrypt(CLOAK_Context* ctx)
     unsigned char key[CLOAK_KEY_SIZE];
     CLOAK_AESGenerateKey(key);
 
-    // Step 1: Sign the AES key BEFORE encryption
-    unsigned char signature[CLOAK_RSA_SIGNATURE_SIZE];
-    size_t signature_len = 0;
-
-    const char* private_rsa_path = CLOAK_CONFIG_GET_RSA_PRIVATE(&ctx->config);
-
-    if (CLOAK_RSASign(key, CLOAK_KEY_SIZE, private_rsa_path, signature, &signature_len) != 0) {
-        ERRO("Failed to sign the AES key");
-        return false;
-    }
-
-    // Step 2: Encrypt the AES key with RSA
+    // Step 1: Encrypt the AES key with RSA
     const char* public_rsa_path = CLOAK_CONFIG_GET_RSA_PUBLIC(&ctx->config);
 
     unsigned char rsa_encrypted_key[CLOAK_RSA_KEY_SIZE];
@@ -73,7 +63,7 @@ int CLOAK_CommandEncrypt(CLOAK_Context* ctx)
         return false;
     }
 
-    // Step 3: Encrypt files or directories
+    // Step 2: Encrypt files or directories
     if (ctx->is_dir) {
         CLOAK_List list = {0};
         CLOAK_ListLoad(&list, ctx->input, ctx->include_gitignore, ctx->include_cloakignore);
@@ -89,22 +79,53 @@ int CLOAK_CommandEncrypt(CLOAK_Context* ctx)
             return false;
     }
 
-    // Step 4: Save the RSA-encrypted key and signature
+    // Step 3: Load existing signatures (if any)
+    CLOAK_SignatureList signatures = {0};
+    CLOAK_LoadSignatures(&signatures);
+
+    // Step 4: Sign the AES key (before encryption)
+    unsigned char new_signature[CLOAK_RSA_SIGNATURE_SIZE];
+    size_t signature_len = 0;
+
+    const char* private_rsa_path = CLOAK_CONFIG_GET_RSA_PRIVATE(&ctx->config);
+    if (CLOAK_RSASign(key, CLOAK_KEY_SIZE, private_rsa_path, new_signature, &signature_len) != 0) {
+        ERRO("Failed to sign the AES key");
+        CLOAK_FreeSignatures(&signatures);
+        return false;
+    }
+
+    // Step 5: Append the new signature
+    signatures.items = realloc(signatures.items, (signatures.count + 1) * sizeof(CLOAK_Signature));
+    if (!signatures.items) {
+        ERRO("Memory allocation failed for signatures.");
+        CLOAK_FreeSignatures(&signatures);
+        return false;
+    }
+    memcpy(signatures.items[signatures.count], new_signature, CLOAK_RSA_SIGNATURE_SIZE);
+    signatures.count++;
+
+    // Step 6: Save the RSA-encrypted key
     FILE* key_file = fopen(CLOAK_KEY_FILE, "wb");
     if (!key_file) {
         ERRO("Failed to open key file for writing.");
+        CLOAK_FreeSignatures(&signatures);
         return false;
     }
     fwrite(rsa_encrypted_key, 1, encrypted_key_len, key_file);
     fclose(key_file);
 
-    FILE* sig_file = fopen(CLOAK_RSA_SIGNATURE_FILE, "wb");
+    // Step 7: Save all signatures
+    FILE* sig_file = fopen(CLOAK_SIGNATURE_FILE, "wb");
     if (!sig_file) {
         ERRO("Failed to open signature file for writing.");
+        CLOAK_FreeSignatures(&signatures);
         return false;
     }
-    fwrite(signature, 1, signature_len, sig_file);
+    fwrite(signatures.items, CLOAK_RSA_SIGNATURE_SIZE, signatures.count, sig_file);
     fclose(sig_file);
+
+    // Free allocated signature memory
+    CLOAK_FreeSignatures(&signatures);
 
     return true;
 }
