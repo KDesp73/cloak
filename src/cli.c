@@ -16,6 +16,10 @@ char* CLOAK_CommandToString(CLOAK_Command c)
         return "generate";
     case CLOAK_COMMAND_INIT:
         return "init";
+    case CLOAK_COMMAND_VERIFY:
+        return "verify";
+    case CLOAK_COMMAND_SIGN:
+        return "sign";
 
     case CLOAK_COMMAND_NONE:
     default:
@@ -36,6 +40,8 @@ CLOAK_Command CLOAK_GetCommand(const char* command)
     else COMPARE_AND_RETURN_COMMAND(CLOAK_COMMAND_LS);
     else COMPARE_AND_RETURN_COMMAND(CLOAK_COMMAND_GENERATE);
     else COMPARE_AND_RETURN_COMMAND(CLOAK_COMMAND_INIT);
+    else COMPARE_AND_RETURN_COMMAND(CLOAK_COMMAND_VERIFY);
+    else COMPARE_AND_RETURN_COMMAND(CLOAK_COMMAND_SIGN);
     
 #undef COMPARE_AND_RETURN_COMMAND
 

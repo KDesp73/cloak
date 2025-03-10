@@ -8,6 +8,10 @@
 #include <openssl/core_names.h>
 #include <stdio.h>
 
+#include <string.h>
+#include <termios.h>
+#include <unistd.h>
+
 #define RSA_KEY_SIZE 2048
 #define PUB_EXPONENT 65537
 
@@ -318,4 +322,35 @@ int CLOAK_RSAVerify(const unsigned char *aes_key, size_t aes_key_len, const unsi
     EVP_PKEY_free(public_key);
 
     return (verify_result == 1) ? 0 : -1;  // Return 0 on success, -1 on failure
+}
+
+int CLOAK_PromptPassword(const char* prompt, char* password, size_t max_len)
+{
+    struct termios oldt, newt;
+    printf("%s", prompt);
+    fflush(stdout);
+
+    // Disable echo
+    tcgetattr(STDIN_FILENO, &oldt);
+    newt = oldt;
+    newt.c_lflag &= ~ECHO;
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+
+    // Read password
+    if (!fgets(password, max_len, stdin)) {
+        tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+        return 0;
+    }
+
+    // Restore terminal settings
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+    printf("\n");
+
+    // Remove newline if present
+    size_t len = strlen(password);
+    if (len > 0 && password[len - 1] == '\n') {
+        password[len - 1] = '\0';
+    }
+    
+    return 1;
 }

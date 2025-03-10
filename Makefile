@@ -91,6 +91,7 @@ clean_cloak: ## Remove all cloak related files
 	rm -f cloak.key
 	rm -f cloak.sig
 	rm -rf .cloak/decrypted/*
+	rm -rf .cloak/cloak.salt
 
 .PHONY: distclean
 distclean: clean ## Perform a full clean, including backup and temporary files
