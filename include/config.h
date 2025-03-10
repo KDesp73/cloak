@@ -43,6 +43,10 @@ void CLOAK_ConfigPrint(const CLOAK_Config* config);
 #define CLOAK_CONFIG_DEFAULT_RSA_PUBLIC          ".cloak/public.pem"
 #define CLOAK_CONFIG_DEFAULT_INCLUDE_GITIGNORE   "true"
 #define CLOAK_CONFIG_DEFAULT_INCLUDE_CLOAKIGNORE "true"
+#define CLOAK_CONFIG_DEFAULT_URL                 ""
+#define CLOAK_CONFIG_DEFAULT_REQUEST_ENDPOINT    ""
+#define CLOAK_CONFIG_DEFAULT_STORE_ENDPOINT      ""
+#define CLOAK_CONFIG_DEFAULT_AUTH_TOKEN          ""
 
 // The following macros can be read as  `<section>,   <key>` and are used only as a parameter
 #define CLOAK_CONFIG_INCLUDE_GITIGNORE   "behaviour", "include_gitignore"
@@ -52,6 +56,10 @@ void CLOAK_ConfigPrint(const CLOAK_Config* config);
 #define CLOAK_CONFIG_RSA_PRIVATE         "paths",     "rsa_private"
 #define CLOAK_CONFIG_RSA_PUBLIC          "paths",     "rsa_public"
 #define CLOAK_CONFIG_KEYS                "paths",     "keys"
+#define CLOAK_CONFIG_URL                 "keyserver", "url"
+#define CLOAK_CONFIG_REQUEST_ENDPOINT    "keyserver", "request_endpoint"
+#define CLOAK_CONFIG_STORE_ENDPOINT      "keyserver", "store_endpoint"
+#define CLOAK_CONFIG_AUTH_TOKEN          "keyserver", "auth_token"
 
 #define GETTER(x) \
     static inline char* CLOAK_CONFIG_GET_##x(const CLOAK_Config* config) { \
@@ -67,6 +75,10 @@ GETTER(INCLUDE_CLOAKIGNORE)
 GETTER(BACKUP)
 GETTER(DECRYPTED)
 GETTER(KEYS)
+GETTER(URL)
+GETTER(REQUEST_ENDPOINT)
+GETTER(STORE_ENDPOINT)
+GETTER(AUTH_TOKEN)
 
 // NO-PREFIX
 

@@ -10,5 +10,8 @@ typedef struct {
     int (*store_key)(const char* user_private_key, const unsigned char *encrypted_key, size_t encrypted_key_len);
 } CLOAK_KeyServer;
 
+// int CLOAK_KeyServerRequestKey(const char* user_public_key, unsigned char *encrypted_key, size_t *encrypted_key_len);
+// int CLOAK_KeyServerStoreKey(const char* user_private_key, const unsigned char *encrypted_key, size_t encrypted_key_len);
+
 
 #endif // KEY_SERVER_H

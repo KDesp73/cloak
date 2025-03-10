@@ -16,7 +16,14 @@ const char* ini =
 "\n"
 "[behaviour]\n"
 "include_gitignore = true\n"
-"include_cloakignore = true\n";
+"include_cloakignore = true\n"
+"\n"
+"[keyserver]\n"
+"url = https://keyserver.example.com\n"
+"request_endpoint = /api/get-key\n"
+"store_endpoint = /api/store-key\n"
+"# Optional: Authentication token (if needed)\n"
+"auth_token = my_auth_token\n";
 
 #include <stdio.h>
 #include <stdlib.h>
