@@ -1,4 +1,5 @@
 #include "rsa.h"
+#include "aes.h"
 #include "config.h"
 #include "extern/logging.h"
 
