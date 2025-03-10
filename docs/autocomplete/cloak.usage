@@ -6,8 +6,6 @@ cloak <COMMANDS> | <HELP> || <VERSION>;
 			 | (hash <INPUT>) "Prints the hash of a file" 
              | (ls [<INPUT>] [<GI-IGNORE>] [<CI-IGNORE>] [<TYPE-L>]) "Lists the files considered in the encryption process"
              | (generate <TYPE-G>) "Generates various files"
-             | (verify) ""
-             | (sign) ""
 			 ;
 
 

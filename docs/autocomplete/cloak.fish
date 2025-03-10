@@ -14,43 +14,43 @@ function _cloak
         set COMP_CWORD (count $COMP_WORDS)
     end
 
-    set literals "decrypt" "rsa" "verify" "-i" "files" "--gitignore-ignore" "init" "ls" "ini" "encrypt" "hash" "--type" "--cloakignore-ignore" "--output" "-o" "generate" "autocomplete" "sign" "--help" "-v" "--version" "--key" "--input"
+    set literals "decrypt" "rsa" "-i" "files" "--gitignore-ignore" "init" "ls" "ini" "encrypt" "hash" "--type" "--cloakignore-ignore" "--output" "-o" "generate" "autocomplete" "--help" "-v" "--version" "--key" "--input"
 
     set descriptions
     set descriptions[1] "Decrypt a file or a directory"
-    set descriptions[4] "Specify the input path"
-    set descriptions[6] "Do not include the gitignore patterns"
-    set descriptions[7] "Initialize cloak in your project"
-    set descriptions[8] "Lists the files considered in the encryption process"
-    set descriptions[10] "Encrypt a file or a directory"
-    set descriptions[11] "Prints the hash of a file"
-    set descriptions[12] "Specify the type"
-    set descriptions[13] "Do not include the cloakignore patterns"
-    set descriptions[15] "Specify the output path"
-    set descriptions[16] "Generates various files"
-    set descriptions[19] "Prints the help message"
-    set descriptions[20] "Prints the project version"
-    set descriptions[22] "Specify the encryption key path"
+    set descriptions[3] "Specify the input path"
+    set descriptions[5] "Do not include the gitignore patterns"
+    set descriptions[6] "Initialize cloak in your project"
+    set descriptions[7] "Lists the files considered in the encryption process"
+    set descriptions[9] "Encrypt a file or a directory"
+    set descriptions[10] "Prints the hash of a file"
+    set descriptions[11] "Specify the type"
+    set descriptions[12] "Do not include the cloakignore patterns"
+    set descriptions[14] "Specify the output path"
+    set descriptions[15] "Generates various files"
+    set descriptions[17] "Prints the help message"
+    set descriptions[18] "Prints the project version"
+    set descriptions[20] "Specify the encryption key path"
 
     set literal_transitions
-    set literal_transitions[1] "set inputs 1 3 18 20 7 8 19 10 11 13 16 21; set tos 7 2 2 2 2 3 2 4 5 2 6 2"
-    set literal_transitions[3] "set inputs 6 4 13 12 23; set tos 16 20 14 15 20"
-    set literal_transitions[4] "set inputs 4 23; set tos 12 12"
-    set literal_transitions[5] "set inputs 4 23; set tos 21 21"
-    set literal_transitions[6] "set inputs 12; set tos 13"
-    set literal_transitions[7] "set inputs 4 23; set tos 8 8"
-    set literal_transitions[9] "set inputs 14 15 22; set tos 17 17 21"
-    set literal_transitions[10] "set inputs 14 6 15; set tos 11 2 11"
-    set literal_transitions[13] "set inputs 2 9 17; set tos 2 2 2"
-    set literal_transitions[14] "set inputs 12; set tos 15"
-    set literal_transitions[15] "set inputs 5; set tos 2"
-    set literal_transitions[16] "set inputs 12 13; set tos 15 14"
-    set literal_transitions[18] "set inputs 22; set tos 21"
-    set literal_transitions[19] "set inputs 12 6 13; set tos 15 16 14"
-    set literal_transitions[22] "set inputs 6; set tos 2"
+    set literal_transitions[1] "set inputs 1 18 6 7 17 9 10 12 15 19; set tos 7 2 2 3 2 4 5 2 6 2"
+    set literal_transitions[3] "set inputs 5 3 12 11 21; set tos 13 22 15 14 22"
+    set literal_transitions[4] "set inputs 3 21; set tos 12 12"
+    set literal_transitions[5] "set inputs 3 21; set tos 10 10"
+    set literal_transitions[6] "set inputs 11; set tos 11"
+    set literal_transitions[7] "set inputs 3 21; set tos 18 18"
+    set literal_transitions[8] "set inputs 13 14 20; set tos 9 9 10"
+    set literal_transitions[11] "set inputs 2 8 16; set tos 2 2 2"
+    set literal_transitions[13] "set inputs 11 12; set tos 14 15"
+    set literal_transitions[14] "set inputs 4; set tos 2"
+    set literal_transitions[15] "set inputs 11; set tos 14"
+    set literal_transitions[16] "set inputs 13 5 14; set tos 17 2 17"
+    set literal_transitions[19] "set inputs 20; set tos 10"
+    set literal_transitions[20] "set inputs 5; set tos 2"
+    set literal_transitions[21] "set inputs 11 5 12; set tos 14 13 15"
 
-    set match_anything_transitions_from 20 11 21 8 17 12
-    set match_anything_transitions_to 19 22 2 9 18 10
+    set match_anything_transitions_from 10 18 9 12 17 22
+    set match_anything_transitions_to 2 8 19 16 20 21
 
     set state 1
     set word_index 2
@@ -102,7 +102,7 @@ function _cloak
         end
     end
 
-    set specialized_command_states 21 17 12 20 8 11
+    set specialized_command_states 18 17 10 22 12 9
     set specialized_command_ids 6 6 6 6 6 6
     if contains $state $specialized_command_states
         set index (contains --index $state $specialized_command_states)
