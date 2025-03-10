@@ -10,8 +10,6 @@ typedef enum {
     CLOAK_COMMAND_LS,
     CLOAK_COMMAND_GENERATE,
     CLOAK_COMMAND_INIT,
-    CLOAK_COMMAND_VERIFY,
-    CLOAK_COMMAND_SIGN,
 } CLOAK_Command;
 
 typedef enum {

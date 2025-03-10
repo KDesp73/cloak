@@ -5,7 +5,7 @@ _cloak_cmd_0 () {
 }
 
 _cloak () {
-    local -a literals=("decrypt" "rsa" "verify" "-i" "files" "--gitignore-ignore" "init" "ls" "ini" "encrypt" "hash" "--type" "--cloakignore-ignore" "--output" "-o" "generate" "autocomplete" "sign" "--help" "-v" "--version" "signatures" "--key" "--input")
+    local -a literals=("decrypt" "rsa" "verify" "-i" "files" "--gitignore-ignore" "init" "ls" "ini" "encrypt" "hash" "--type" "--cloakignore-ignore" "--output" "-o" "generate" "autocomplete" "sign" "--help" "-v" "--version" "--key" "--input")
 
     local -A descriptions
     descriptions[1]="Decrypt a file or a directory"
@@ -21,27 +21,27 @@ _cloak () {
     descriptions[16]="Generates various files"
     descriptions[19]="Prints the help message"
     descriptions[20]="Prints the project version"
-    descriptions[23]="Specify the encryption key path"
+    descriptions[22]="Specify the encryption key path"
 
     local -A literal_transitions
     literal_transitions[1]="([1]=7 [3]=2 [18]=2 [20]=2 [7]=2 [8]=3 [19]=2 [10]=4 [11]=5 [13]=2 [16]=6 [21]=2)"
-    literal_transitions[3]="([6]=21 [4]=16 [13]=20 [12]=14 [24]=16)"
-    literal_transitions[4]="([4]=13 [24]=13)"
-    literal_transitions[5]="([4]=10 [24]=10)"
-    literal_transitions[6]="([12]=15)"
-    literal_transitions[7]="([4]=18 [24]=18)"
-    literal_transitions[8]="([14]=9 [15]=9 [23]=10)"
-    literal_transitions[11]="([14]=12 [6]=2 [15]=12)"
-    literal_transitions[14]="([5]=2 [22]=2)"
-    literal_transitions[15]="([2]=2 [9]=2 [17]=2)"
-    literal_transitions[17]="([12]=14 [6]=21 [13]=20)"
-    literal_transitions[19]="([23]=10)"
-    literal_transitions[20]="([12]=14)"
-    literal_transitions[21]="([12]=14 [13]=20)"
+    literal_transitions[3]="([6]=16 [4]=20 [13]=14 [12]=15 [23]=20)"
+    literal_transitions[4]="([4]=12 [23]=12)"
+    literal_transitions[5]="([4]=21 [23]=21)"
+    literal_transitions[6]="([12]=13)"
+    literal_transitions[7]="([4]=8 [23]=8)"
+    literal_transitions[9]="([14]=17 [15]=17 [22]=21)"
+    literal_transitions[10]="([14]=11 [6]=2 [15]=11)"
+    literal_transitions[13]="([2]=2 [9]=2 [17]=2)"
+    literal_transitions[14]="([12]=15)"
+    literal_transitions[15]="([5]=2)"
+    literal_transitions[16]="([12]=15 [13]=14)"
+    literal_transitions[18]="([22]=21)"
+    literal_transitions[19]="([12]=15 [6]=16 [13]=14)"
     literal_transitions[22]="([6]=2)"
 
     local -A match_anything_transitions
-    match_anything_transitions=([16]=17 [10]=2 [18]=8 [9]=19 [13]=11 [12]=22)
+    match_anything_transitions=([20]=19 [11]=22 [21]=2 [8]=9 [17]=18 [12]=10)
 
     declare -A subword_transitions
 
@@ -77,13 +77,13 @@ _cloak () {
 
         return 1
     done
-    declare -A literal_transitions_level_0=([1]="1 3 18 20 7 8 19 10 11 13 16" [20]="12" [11]="6 15" [7]="4" [6]="12" [21]="12 13" [4]="4" [3]="6 4 13 12" [15]="2 9 17" [14]="5 22" [8]="15 23" [22]="6" [17]="12 6 13" [5]="4" [19]="23")
-    declare -A literal_transitions_level_1=([7]="24" [5]="24" [4]="24" [3]="24" [1]="21" [8]="14" [11]="14")
+    declare -A literal_transitions_level_0=([1]="1 3 18 20 7 8 19 10 11 13 16" [7]="4" [16]="12 13" [6]="12" [10]="6 15" [4]="4" [18]="22" [9]="15 22" [15]="5" [14]="12" [13]="2 9 17" [19]="12 6 13" [22]="6" [3]="6 4 13 12" [5]="4")
+    declare -A literal_transitions_level_1=([9]="14" [10]="14" [4]="23" [5]="23" [1]="21" [3]="23" [7]="23")
     declare -A subword_transitions_level_0=()
     declare -A subword_transitions_level_1=()
     declare -A commands_level_0=()
     declare -A commands_level_1=()
-    declare -A specialized_commands_level_0=([16]="0" [18]="0" [10]="0" [13]="0" [12]="0" [9]="0")
+    declare -A specialized_commands_level_0=([11]="0" [17]="0" [12]="0" [20]="0" [8]="0" [21]="0")
     declare -A specialized_commands_level_1=()
 
      local max_fallback_level=1

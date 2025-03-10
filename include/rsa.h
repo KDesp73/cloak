@@ -1,8 +1,8 @@
 #ifndef RSA_H
 #define RSA_H
 
-#include "aes.h"
 #include <sodium.h>
+#include <stdbool.h>
 #include <string.h>
 
 #define CLOAK_RSA_KEY_SIZE 256

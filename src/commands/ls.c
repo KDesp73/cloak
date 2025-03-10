@@ -1,7 +1,6 @@
 #include "context.h"
 #include "extern/logging.h"
 #include "listing.h"
-#include "signature.h"
 #include <string.h>
 
 int CLOAK_CommandLs(CLOAK_Context* ctx)
@@ -20,26 +19,7 @@ int CLOAK_CommandLs(CLOAK_Context* ctx)
         return true;
     }
 
-    if (!strcmp(ctx->type, "signatures")) {
-        CLOAK_SignatureList s = {0};
-        CLOAK_LoadSignatures(&s);
-
-        for(size_t i = 0; i < s.count; i++){
-            printf("- ");
-            for(size_t byte = 0; byte < 16; byte++) {
-                printf("%x", s.items[i][byte]);
-            }
-            printf("...\n");
-        }
-        CLOAK_FreeSignatures(&s);
-
-        return true;
-    } else {
-        ERRO("Unknown type '%s'", ctx->type);
-        return false;
-    }
-
-
-    return true;
+    ERRO("Unknown type '%s'", ctx->type);
+    return false;
 }
 

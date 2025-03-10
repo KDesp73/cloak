@@ -118,15 +118,6 @@ static bool validateCommandGenerate(CLOAK_Context* ctx)
     return true;
 }
 
-static bool validateCommandVerify(CLOAK_Context* ctx)
-{
-    if (!validateInput(ctx)) {
-        return false;
-    }
-
-    return true;
-}
-
 bool CLOAK_ContextValidate(CLOAK_Context* ctx) 
 {
     if (ctx->command == CLOAK_COMMAND_NONE) {
@@ -159,12 +150,6 @@ bool CLOAK_ContextValidate(CLOAK_Context* ctx)
 
     if(ctx->command == CLOAK_COMMAND_GENERATE) {
         if(!validateCommandGenerate(ctx)) {
-            return false;
-        }
-    }
-
-    if(ctx->command == CLOAK_COMMAND_VERIFY) {
-        if(!validateCommandVerify(ctx)){
             return false;
         }
     }

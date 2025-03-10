@@ -15,8 +15,6 @@ int CLOAK_CommandHash(CLOAK_Context* ctx);
 int CLOAK_CommandLs(CLOAK_Context* ctx);
 int CLOAK_CommandGenerate(CLOAK_Context* ctx);
 int CLOAK_CommandInit(CLOAK_Context* ctx);
-int CLOAK_CommandVerify(CLOAK_Context* ctx);
-int CLOAK_CommandSign(CLOAK_Context* ctx);
 
 static inline CLOAK_CommandFunc CLOAK_GetCommandFunc(CLOAK_Command command)
 {
@@ -33,10 +31,6 @@ static inline CLOAK_CommandFunc CLOAK_GetCommandFunc(CLOAK_Command command)
         return CLOAK_CommandGenerate;
     case CLOAK_COMMAND_INIT:
         return CLOAK_CommandInit;
-    case CLOAK_COMMAND_VERIFY:
-        return CLOAK_CommandVerify;
-    case CLOAK_COMMAND_SIGN:
-        return CLOAK_CommandSign;
 
     case CLOAK_COMMAND_NONE:
     default:

@@ -8,8 +8,6 @@ static void decryptHelp();
 static void hashHelp();
 static void lsHelp();
 static void generateHelp();
-static void verifyHelp();
-static void signHelp();
 
 static void footer();
 
@@ -31,11 +29,6 @@ void CLOAK_Help(CLOAK_Command command)
         case CLOAK_COMMAND_GENERATE:
             generateHelp();
             break;
-        case CLOAK_COMMAND_VERIFY:
-            verifyHelp();
-            break;
-        case CLOAK_COMMAND_SIGN:
-            signHelp();
 
         case CLOAK_COMMAND_NONE:
         default:
@@ -147,7 +140,6 @@ static void lsHelp()
 
     PB("TYPES");
     PI("files                      The default type");
-    PI("signatures                 Signatures that have signed the cloak key");
 }
 
 static void generateHelp()
@@ -165,24 +157,4 @@ static void generateHelp()
     PI("ini                        `cloak.ini` config file");
     PI("autocomplete               Autocompletion scripts for bash, zsh and fish");
     PI("rsa                        Private and public RSA keys located in .cloak/");
-}
-
-static void verifyHelp()
-{
-    PB("USAGE");
-    PI("cloak verify");
-    printf("\n");
-
-    PB("OPTIONS");
-    PI("-h --help                  Prints this message");
-}
-
-static void signHelp()
-{
-    PB("USAGE");
-    PI("cloak sign");
-    printf("\n");
-
-    PB("OPTIONS");
-    PI("-h --help                  Prints this message");
 }

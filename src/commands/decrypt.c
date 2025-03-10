@@ -7,7 +7,6 @@
 #include "files.h"
 #include "rsa.h"
 #include "listing.h"
-#include "signature.h"
 
 #include <stdio.h>
 #include <stdlib.h>

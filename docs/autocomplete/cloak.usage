@@ -22,5 +22,5 @@ cloak <COMMANDS> | <HELP> || <VERSION>;
 <TYPES-G> ::= (ini | autocomplete | rsa);
 <TYPE-G> ::= (--type <TYPES-G>) "Specify the type";
 
-<TYPES-L> ::= (signatures | files);
+<TYPES-L> ::= (files);
 <TYPE-L> ::= (--type <TYPES-L>) "Specify the type";
