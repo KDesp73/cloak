@@ -18,6 +18,7 @@ void CLOAK_ContextInit(CLOAK_Context* ctx, int argc, char** argv)
     ctx->argv = argv;
     ctx->include_gitignore = true;
     ctx->include_cloakignore = true;
+    ctx->key_server = NULL;
     
     // Load ini config
     CLOAK_ConfigLoad(&ctx->config, CLOAK_CONFIG_FILE);

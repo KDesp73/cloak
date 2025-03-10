@@ -63,22 +63,21 @@ int CLOAK_CommandEncrypt(CLOAK_Context* ctx)
     // Generate a random AES key
     randombytes_buf(aes_key, CLOAK_KEY_SIZE);  // Generate random AES key for encryption
 
-    // Get the list of public RSA keys for all collaborators
-    // You would retrieve the public RSA keys from your configuration or other source
-    const char* public_rsa_paths[] = {
-        CLOAK_CONFIG_GET_RSA_PUBLIC(&ctx->config)  // Add more public RSA key paths for other users if necessary
-    };
+    const char* public_rsa_path = CLOAK_CONFIG_GET_RSA_PUBLIC(&ctx->config);
 
-    // Encrypt the AES key with each collaborator's RSA public key
-    for (size_t i = 0; i < sizeof(public_rsa_paths) / sizeof(public_rsa_paths[0]); ++i) {
-        const char* public_rsa_path = public_rsa_paths[i];
-        
-        if (!CLOAK_RSAEncrypt(aes_key, CLOAK_KEY_SIZE, public_rsa_path, encrypted_key, &encrypted_key_len)) {
-            ERRO("RSA encryption of AES key failed for user: %s", public_rsa_path);
+    if (!CLOAK_RSAEncrypt(aes_key, CLOAK_KEY_SIZE, public_rsa_path, encrypted_key, &encrypted_key_len)) {
+        ERRO("RSA encryption of AES key failed for user: %s", public_rsa_path);
+        return false;
+    }
+
+    // If key server is defined, store the encrypted AES key there
+    if (ctx->key_server) {
+        if (ctx->key_server->store_key(public_rsa_path, encrypted_key, encrypted_key_len) != 0) {
+            ERRO("Failed to store encrypted AES key on key server for user: %s", public_rsa_path);
             return false;
         }
-
-        // Store the encrypted AES key for the specific user
+    } else {
+        // Otherwise, store the encrypted AES key in a local file for the user
         FILE* key_file = fopen(CLOAK_KEY_FILE, "wb");
         if (!key_file) {
             ERRO("Failed to open key file for writing: %s", CLOAK_KEY_FILE);

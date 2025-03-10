@@ -3,6 +3,7 @@
 
 #include "cli.h"
 #include "config.h"
+#include "keyserver.h"
 #include <stdbool.h>
 
 typedef struct {
@@ -17,6 +18,7 @@ typedef struct {
     bool include_cloakignore;
     char* type;
     CLOAK_Config config;
+    CLOAK_KeyServer* key_server;
 } CLOAK_Context;
 
 void CLOAK_ContextInit(CLOAK_Context* ctx, int argc, char** argv);

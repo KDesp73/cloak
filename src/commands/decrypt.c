@@ -157,24 +157,34 @@ static int decryptMultiple(const char* in, const char* out, unsigned char key[CL
 
 int CLOAK_CommandDecrypt(CLOAK_Context* ctx)
 {
-    // Get the path to the RSA-encrypted AES key file
-    const char* key_path = (ctx->key) ? ctx->key : CLOAK_KEY_FILE;
-
     unsigned char encrypted_key[CLOAK_RSA_KEY_SIZE];  // Store the RSA-encrypted AES key
-    FILE* key_file = fopen(key_path, "rb");
-    if (!key_file) {
-        ERRO("Failed to open key file for reading.");
-        return false;
-    }
+    size_t encrypted_key_len = 0;
 
-    // Read the RSA-encrypted AES key
-    size_t encrypted_key_len = fread(encrypted_key, 1, CLOAK_RSA_KEY_SIZE, key_file);
-    if (encrypted_key_len != CLOAK_RSA_KEY_SIZE) {
-        ERRO("Failed to read the complete RSA-encrypted AES key from file.");
+    // Get the path to the RSA-encrypted AES key file or request from the key server
+    if (ctx->key_server) {
+        // Request the encrypted AES key from the key server
+        if (ctx->key_server->request_key(CLOAK_CONFIG_GET_RSA_PUBLIC(&ctx->config), encrypted_key, &encrypted_key_len) != 0) {
+            ERRO("Key server request failed.");
+            return false;
+        }
+    } else {
+        // Read the RSA-encrypted AES key from a local file
+        const char* key_path = (ctx->key) ? ctx->key : CLOAK_KEY_FILE;
+        FILE* key_file = fopen(key_path, "rb");
+        if (!key_file) {
+            ERRO("Failed to open key file for reading.");
+            return false;
+        }
+
+        // Read the RSA-encrypted AES key
+        encrypted_key_len = fread(encrypted_key, 1, CLOAK_RSA_KEY_SIZE, key_file);
+        if (encrypted_key_len != CLOAK_RSA_KEY_SIZE) {
+            ERRO("Failed to read the complete RSA-encrypted AES key from file.");
+            fclose(key_file);
+            return false;
+        }
         fclose(key_file);
-        return false;
     }
-    fclose(key_file);
 
     // Decrypt the AES key using the private RSA key
     const char* private_rsa_path = CLOAK_CONFIG_GET_RSA_PRIVATE(&ctx->config);

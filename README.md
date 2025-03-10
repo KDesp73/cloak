@@ -23,16 +23,6 @@ cloak hash -i <PATH>
 cloak ls
 ```
 
-### Validate the signatures or the key
-```bash
-cloak validate -i <SIG-PATH | KEY-PATH>
-```
-
-### Sign the key
-```bash
-cloak sign -i <KEY-PATH>
-```
-
 ## Ignore file
 
 The `.cloakignore` file is being used to define the patterns that are being ignored in the encryption process.
