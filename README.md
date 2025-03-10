@@ -2,13 +2,13 @@
 
 ## Usage
 
-### Encrypt a file 
+### Encrypt a file or a directory
 ```bash
 cloak encrypt -i <PATH> [-o <PATH>]
 ```
 > Default output: `<FILE>.cloak` 
 
-### Decrypt a file
+### Decrypt a file or a directory
 ```bash
 cloak decrypt -i <PATH> -o <PATH> -k <KEY-PATH>
 ```
@@ -37,7 +37,6 @@ Anything inside the `.gitignore` file is also included in this list depending on
 - `cloak.ini`
 - `.cloak/*`
 - `cloak.key`
-- `cloak.sig`
 
 ## License
 

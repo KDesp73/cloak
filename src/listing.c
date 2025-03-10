@@ -18,7 +18,6 @@ static char CLOAK_Ignored[CLOAK_IGNORED_LEN][64] = {
     "cloak.ini",
     ".cloak/*",
     "cloak.key",
-    "cloak.sig"
 };
 
 static size_t loadPatternsFromFile(char*** patterns, const char* path, size_t count)
