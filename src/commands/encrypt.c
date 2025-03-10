@@ -56,81 +56,56 @@ static int encryptFile(const char* in, const char* out, unsigned char key[CLOAK_
 
 int CLOAK_CommandEncrypt(CLOAK_Context* ctx)
 {
-    unsigned char key[CLOAK_KEY_SIZE];
-    unsigned char salt[CLOAK_SALT_SIZE];
-    unsigned char encrypted_key[CLOAK_RSA_KEY_SIZE];
+    unsigned char aes_key[CLOAK_KEY_SIZE];  // AES key to encrypt files
+    unsigned char encrypted_key[CLOAK_RSA_KEY_SIZE];  // Encrypted AES key (using RSA public keys)
     size_t encrypted_key_len;
 
-    // Ask for the password
-    char password[CLOAK_PASSWORD_MAX];
-    if (!CLOAK_PromptPassword("Enter encryption password: ", password, sizeof(password))) {
-        ERRO("Failed to get password.");
-        return false;
-    }
+    // Generate a random AES key
+    randombytes_buf(aes_key, CLOAK_KEY_SIZE);  // Generate random AES key for encryption
 
-    // Check if a salt exists; otherwise, generate a new one
-    FILE* salt_file = fopen(CLOAK_SALT_FILE, "rb");
-    if (salt_file) {
-        if (fread(salt, 1, CLOAK_SALT_SIZE, salt_file) != CLOAK_SALT_SIZE) {
-            ERRO("Failed to read existing salt.");
-            fclose(salt_file);
+    // Get the list of public RSA keys for all collaborators
+    // You would retrieve the public RSA keys from your configuration or other source
+    const char* public_rsa_paths[] = {
+        CLOAK_CONFIG_GET_RSA_PUBLIC(&ctx->config)  // Add more public RSA key paths for other users if necessary
+    };
+
+    // Encrypt the AES key with each collaborator's RSA public key
+    for (size_t i = 0; i < sizeof(public_rsa_paths) / sizeof(public_rsa_paths[0]); ++i) {
+        const char* public_rsa_path = public_rsa_paths[i];
+        
+        if (!CLOAK_RSAEncrypt(aes_key, CLOAK_KEY_SIZE, public_rsa_path, encrypted_key, &encrypted_key_len)) {
+            ERRO("RSA encryption of AES key failed for user: %s", public_rsa_path);
             return false;
         }
-        fclose(salt_file);
-    } else {
-        randombytes_buf(salt, CLOAK_SALT_SIZE);
-        salt_file = fopen(CLOAK_SALT_FILE, "wb");
-        if (!salt_file) {
-            ERRO("Failed to store salt.");
+
+        // Store the encrypted AES key for the specific user
+        FILE* key_file = fopen(CLOAK_KEY_FILE, "wb");
+        if (!key_file) {
+            ERRO("Failed to open key file for writing: %s", CLOAK_KEY_FILE);
             return false;
         }
-        fwrite(salt, 1, CLOAK_SALT_SIZE, salt_file);
-        fclose(salt_file);
+        fwrite(encrypted_key, 1, encrypted_key_len, key_file);
+        fclose(key_file);
     }
 
-    // Derive key from password and salt
-    if (crypto_pwhash(key, CLOAK_KEY_SIZE, password, strlen(password), salt,
-                      crypto_pwhash_OPSLIMIT_MODERATE, crypto_pwhash_MEMLIMIT_MODERATE,
-                      crypto_pwhash_ALG_DEFAULT) != 0) {
-        ERRO("Key derivation failed.");
-        return false;
-    }
-
-    // Encrypt the derived key with RSA for collaboration
-    const char* public_rsa_path = CLOAK_CONFIG_GET_RSA_PUBLIC(&ctx->config);
-    if (!CLOAK_RSAEncrypt(key, CLOAK_KEY_SIZE, public_rsa_path, encrypted_key, &encrypted_key_len)) {
-        ERRO("RSA encryption of key failed.");
-        return false;
-    }
-
-    // Store the encrypted AES key
-    FILE* key_file = fopen(CLOAK_KEY_FILE, "wb");
-    if (!key_file) {
-        ERRO("Failed to open key file for writing.");
-        return false;
-    }
-    fwrite(encrypted_key, 1, encrypted_key_len, key_file);
-    fclose(key_file);
-
-    // Encrypt files or directories
+    // Encrypt files or directories using the AES key
     if (ctx->is_dir) {
         CLOAK_List list = {0};
         CLOAK_ListLoad(&list, ctx->input, ctx->include_gitignore, ctx->include_cloakignore);
 
         for (size_t i = 0; i < list.count; i++) {
-            if (!encryptFile(list.files[i], NULL, key)) {
+            if (!encryptFile(list.files[i], NULL, aes_key)) {
                 ERRO("Could not encrypt '%s'", list.files[i]);
             }
         }
         CLOAK_ListFree(&list);
     } else {
-        if (!encryptFile(ctx->input, ctx->output, key)) {
+        if (!encryptFile(ctx->input, ctx->output, aes_key)) {
             return false;
         }
     }
 
-    sodium_memzero(key, CLOAK_KEY_SIZE);
-    sodium_memzero(password, CLOAK_PASSWORD_MAX);
+    sodium_memzero(aes_key, CLOAK_KEY_SIZE);  // Clean up sensitive data
     return true;
 }
 

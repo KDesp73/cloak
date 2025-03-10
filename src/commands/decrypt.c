@@ -157,9 +157,10 @@ static int decryptMultiple(const char* in, const char* out, unsigned char key[CL
 
 int CLOAK_CommandDecrypt(CLOAK_Context* ctx)
 {
+    // Get the path to the RSA-encrypted AES key file
     const char* key_path = (ctx->key) ? ctx->key : CLOAK_KEY_FILE;
 
-    unsigned char key[CLOAK_RSA_KEY_SIZE];
+    unsigned char encrypted_key[CLOAK_RSA_KEY_SIZE];  // Store the RSA-encrypted AES key
     FILE* key_file = fopen(key_path, "rb");
     if (!key_file) {
         ERRO("Failed to open key file for reading.");
@@ -167,54 +168,21 @@ int CLOAK_CommandDecrypt(CLOAK_Context* ctx)
     }
 
     // Read the RSA-encrypted AES key
-    if (fread(key, 1, CLOAK_RSA_KEY_SIZE, key_file) != CLOAK_RSA_KEY_SIZE) {
+    size_t encrypted_key_len = fread(encrypted_key, 1, CLOAK_RSA_KEY_SIZE, key_file);
+    if (encrypted_key_len != CLOAK_RSA_KEY_SIZE) {
         ERRO("Failed to read the complete RSA-encrypted AES key from file.");
         fclose(key_file);
         return false;
     }
     fclose(key_file);
 
-    // Load the salt from file (for password-based key derivation)
-    unsigned char salt[CLOAK_SALT_SIZE];
-    FILE* salt_file = fopen(CLOAK_SALT_FILE, "rb");
-    if (!salt_file) {
-        ERRO("Failed to open salt file.");
-        return false;
-    }
-
-    if (fread(salt, 1, CLOAK_SALT_SIZE, salt_file) != CLOAK_SALT_SIZE) {
-        ERRO("Failed to read the salt from file.");
-        fclose(salt_file);
-        return false;
-    }
-    fclose(salt_file);
-
-    // Prompt the user for the password
-    char password[CLOAK_PASSWORD_MAX];
-    if (!CLOAK_PromptPassword("Enter decryption password: ", password, sizeof(password))) {
-        ERRO("Failed to get password.");
-        return false;
-    }
-
-    // Derive the AES key from the password and salt
-    unsigned char aes_key[CLOAK_KEY_SIZE];
-    if (crypto_pwhash(aes_key, CLOAK_KEY_SIZE, password, strlen(password), salt,
-                      crypto_pwhash_OPSLIMIT_MODERATE, crypto_pwhash_MEMLIMIT_MODERATE,
-                      crypto_pwhash_ALG_DEFAULT) != 0) {
-        ERRO("Key derivation failed.");
-        sodium_memzero(password, CLOAK_PASSWORD_MAX);
-        return false;
-    }
-
-    sodium_memzero(password, CLOAK_PASSWORD_MAX);
-
     // Decrypt the AES key using the private RSA key
     const char* private_rsa_path = CLOAK_CONFIG_GET_RSA_PRIVATE(&ctx->config);
 
-    unsigned char decrypted_aes_key[CLOAK_KEY_SIZE];
+    unsigned char aes_key[CLOAK_KEY_SIZE];
     size_t aes_key_len = 0;
 
-    if (!CLOAK_RSADecrypt(key, CLOAK_RSA_KEY_SIZE, private_rsa_path, decrypted_aes_key, &aes_key_len)) {
+    if (!CLOAK_RSADecrypt(encrypted_key, encrypted_key_len, private_rsa_path, aes_key, &aes_key_len)) {
         ERRO("RSA decryption failed.");
         return false;
     }
@@ -224,24 +192,19 @@ int CLOAK_CommandDecrypt(CLOAK_Context* ctx)
         return false;
     }
 
-    // Verify that the derived AES key matches the decrypted one
-    if (memcmp(aes_key, decrypted_aes_key, CLOAK_KEY_SIZE) != 0) {
-        ERRO("Decrypted AES key does not match the derived key.");
-        return false;
-    }
-
-    // Decrypt files or directories
+    // Decrypt files or directories using the AES key
     if (ctx->is_dir) {
-        if (!decryptMultiple(ctx->input, ctx->output, decrypted_aes_key)) {
+        if (!decryptMultiple(ctx->input, ctx->output, aes_key)) {
             INFO("Aborting...");
             return false;
         }
     } else {
-        if (!decryptFile(ctx->input, ctx->output, decrypted_aes_key)) {
+        if (!decryptFile(ctx->input, ctx->output, aes_key)) {
             return false;
         }
     }
 
+    sodium_memzero(aes_key, CLOAK_KEY_SIZE);  // Clean up sensitive data
     return true;
 }
 
