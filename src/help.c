@@ -60,8 +60,6 @@ static void help()
     PI("hash                       Prints the hash of a file");
     PI("ls                         Lists the files considered in the encryption process");
     PI("generate                   Generates various files");
-    PI("verify                     Verifies an RSA signature");
-    PI("sign                       Signs the cloak key");
     printf("\n");
 
     PB("OPTIONS");
